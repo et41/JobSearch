@@ -4,6 +4,6 @@
     {
         public int JobCategoryId { get; set; }
         public string JobCategoryName { get; set; }
-        public ICollection<JobPost>? JobPosts { get; set; } 
+        public virtual ICollection<JobPost>? JobPosts { get; set; } 
     }
 }

@@ -36,7 +36,7 @@ namespace JobApi.Migrations
 
                     b.HasKey("JobCategoryId");
 
-                    b.ToTable("JobCategories", (string)null);
+                    b.ToTable("JobCategories");
                 });
 
             modelBuilder.Entity("JobApi.Models.JobLocation", b =>
@@ -52,7 +52,6 @@ namespace JobApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Country")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StreetAddress")
@@ -61,7 +60,7 @@ namespace JobApi.Migrations
 
                     b.HasKey("JobLocationId");
 
-                    b.ToTable("JobLocations", (string)null);
+                    b.ToTable("JobLocations");
                 });
 
             modelBuilder.Entity("JobApi.Models.JobPost", b =>
@@ -72,10 +71,14 @@ namespace JobApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CompanyId")
+                    b.Property<int?>("CompanyId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -90,8 +93,20 @@ namespace JobApi.Migrations
                     b.Property<int?>("JobLocationId")
                         .HasColumnType("int");
 
-                    b.Property<int>("JobTypeId")
+                    b.Property<string>("JobName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("JobTypeId")
                         .HasColumnType("int");
+
+                    b.Property<string>("JobTypeName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -101,7 +116,7 @@ namespace JobApi.Migrations
 
                     b.HasIndex("JobTypeId");
 
-                    b.ToTable("JobPosts", (string)null);
+                    b.ToTable("JobPosts");
                 });
 
             modelBuilder.Entity("JobApi.Models.JobType", b =>
@@ -118,7 +133,7 @@ namespace JobApi.Migrations
 
                     b.HasKey("JobTypeId");
 
-                    b.ToTable("JobTypes", (string)null);
+                    b.ToTable("JobTypes");
                 });
 
             modelBuilder.Entity("JobApi.Models.JobPost", b =>
@@ -133,9 +148,7 @@ namespace JobApi.Migrations
 
                     b.HasOne("JobApi.Models.JobType", "JobType")
                         .WithMany("JobPosts")
-                        .HasForeignKey("JobTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("JobTypeId");
 
                     b.Navigation("JobCategory");
 

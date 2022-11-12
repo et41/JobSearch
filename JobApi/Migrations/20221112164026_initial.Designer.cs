@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221102174418_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20221112164026_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -38,7 +38,7 @@ namespace JobApi.Migrations
 
                     b.HasKey("JobCategoryId");
 
-                    b.ToTable("jobCategories");
+                    b.ToTable("JobCategories");
                 });
 
             modelBuilder.Entity("JobApi.Models.JobLocation", b =>
@@ -54,7 +54,6 @@ namespace JobApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Country")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StreetAddress")
@@ -63,7 +62,7 @@ namespace JobApi.Migrations
 
                     b.HasKey("JobLocationId");
 
-                    b.ToTable("jobLocations");
+                    b.ToTable("JobLocations");
                 });
 
             modelBuilder.Entity("JobApi.Models.JobPost", b =>
@@ -74,10 +73,14 @@ namespace JobApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CompanyId")
+                    b.Property<int?>("CompanyId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -89,15 +92,86 @@ namespace JobApi.Migrations
                     b.Property<int?>("JobCategoryId")
                         .HasColumnType("int");
 
-                    b.Property<int>("JobLocationId")
+                    b.Property<int?>("JobLocationId")
                         .HasColumnType("int");
 
-                    b.Property<int>("JobTypeId")
+                    b.Property<string>("JobName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("JobTypeId")
                         .HasColumnType("int");
+
+                    b.Property<string>("JobTypeName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("jobPosts");
+                    b.HasIndex("JobCategoryId");
+
+                    b.HasIndex("JobLocationId");
+
+                    b.HasIndex("JobTypeId");
+
+                    b.ToTable("JobPosts");
+                });
+
+            modelBuilder.Entity("JobApi.Models.JobType", b =>
+                {
+                    b.Property<int>("JobTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("JobTypeId"), 1L, 1);
+
+                    b.Property<string>("JobTypeName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("JobTypeId");
+
+                    b.ToTable("JobTypes");
+                });
+
+            modelBuilder.Entity("JobApi.Models.JobPost", b =>
+                {
+                    b.HasOne("JobApi.Models.JobCategory", "JobCategory")
+                        .WithMany("JobPosts")
+                        .HasForeignKey("JobCategoryId");
+
+                    b.HasOne("JobApi.Models.JobLocation", "JobLocation")
+                        .WithMany("JobPosts")
+                        .HasForeignKey("JobLocationId");
+
+                    b.HasOne("JobApi.Models.JobType", "JobType")
+                        .WithMany("JobPosts")
+                        .HasForeignKey("JobTypeId");
+
+                    b.Navigation("JobCategory");
+
+                    b.Navigation("JobLocation");
+
+                    b.Navigation("JobType");
+                });
+
+            modelBuilder.Entity("JobApi.Models.JobCategory", b =>
+                {
+                    b.Navigation("JobPosts");
+                });
+
+            modelBuilder.Entity("JobApi.Models.JobLocation", b =>
+                {
+                    b.Navigation("JobPosts");
+                });
+
+            modelBuilder.Entity("JobApi.Models.JobType", b =>
+                {
+                    b.Navigation("JobPosts");
                 });
 #pragma warning restore 612, 618
         }

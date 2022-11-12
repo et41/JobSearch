@@ -1,9 +1,7 @@
+using AutoMapper;
 using JobApi.DataAccess;
-using JobApi.Services;
+using JobApi.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Cryptography.X509Certificates;
-
 namespace JobApi
 {
     public class Program
@@ -25,7 +23,10 @@ namespace JobApi
                     builder.Configuration.GetConnectionString("DefaultConnection")
                     )
                 );
-            
+            builder.Services.AddScoped<IJobPostsRepository, JobPostsRepository>();
+            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
