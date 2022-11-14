@@ -21,7 +21,7 @@ namespace JobApi.DataAccess
             if (jobpost != null)
             {
                 var _mappedJobPost = _mapper.Map<JobPost>(jobpost);
-                // compare names and find the matching id if not create id
+                // compare names and find the matching id if not create 
                 try
                 {
                     var id = _context.JobCategories.First(s => s.JobCategoryName == jobpost.JobCategoryName).JobCategoryId;
@@ -57,11 +57,17 @@ namespace JobApi.DataAccess
         } 
         public async Task<List<JobPost>> GetAllJobPost()
         {
-
             var posts = await _context.Set<JobPost>()
                 .Include(c => c.JobType)
                 .Include(c => c.JobLocation).ToListAsync();
             return posts;
+        }
+        public async Task<JobPostGetDTO> GetByIdJobPost(int id)
+        {
+            var postById = await _context.Set<JobPost>()
+                .Include(c => c.JobLocation)
+                .Include(c => c.JobCategory).FirstOrDefaultAsync(e => e.Id == id);
+            return _mapper.Map<JobPostGetDTO>(postById);
         }
     }
 }

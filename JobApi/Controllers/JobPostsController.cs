@@ -18,10 +18,24 @@ namespace JobApi.Controllers
             _repository = repository;
         }
         [HttpGet]
-        public async Task<List<JobPost>> Get()
+        public async Task<ActionResult<List<JobPost>>> Get()
         {
-            var data =  _repository.GetAllJobPost();
-            return await data;
+            var data =  await _repository.GetAllJobPost();
+            if (data == null)
+                return NotFound();
+            return data;
+        }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<JobPostGetDTO>> GetJobPost(int id)
+        {
+            var jobPost = await _repository.GetByIdJobPost(id);
+
+            if (jobPost == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(jobPost);
         }
         [HttpPost]
         public async Task<ActionResult<JobPostDTO>> Add(JobPostDTO jobpost)
@@ -29,13 +43,11 @@ namespace JobApi.Controllers
             await _repository.CreateJobPost(jobpost);
             return Ok(_repository.GetAll());
         }
-        /*
-        [HttpPost]
-        public async Task<ActionResult<JobPostDTO>> Add(JobPostDTO jobpost)
+        [HttpPut] 
+        public async Task<ActionResult<JobPostDTO>> Update(JobPostDTO jobpost)
         {
-            await _repository.CreateJobPostWithDto(jobpost);
-            return Ok(_repository.GetAll());
+            await _repository.Update(jobpost);
+
         }
-        */
     }
 }
