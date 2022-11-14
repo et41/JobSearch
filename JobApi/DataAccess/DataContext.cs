@@ -17,7 +17,26 @@ namespace JobApi.DataAccess
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            
+            builder.Entity<JobType>().HasData(
+                new JobType
+                {
+                    JobTypeId = 1,
+                    JobTypeName = "remote",
+                });
+            builder.Entity<JobCategory>().HasData(
+                new JobCategory
+                {
+                    JobCategoryId = 1,
+                    JobCategoryName = "backend developer"
+                });
+            builder.Entity<JobLocation>().HasData(
+                new JobLocation 
+                { 
+                    JobLocationId = 1,
+                    StreetAddress = "Buyukdere",
+                    City = "Istanbul",
+                    Country = "Turkey",
+                });
         }
     }
 }

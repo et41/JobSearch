@@ -40,7 +40,6 @@ namespace JobApi
 
             app.UseAuthorization();
 
-
             app.MapControllers();
 
             app.Run();

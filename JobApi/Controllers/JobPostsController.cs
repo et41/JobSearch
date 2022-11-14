@@ -18,20 +18,24 @@ namespace JobApi.Controllers
             _repository = repository;
         }
         [HttpGet]
-        public JobPost GetAllMapper()
+        public async Task<List<JobPost>> Get()
         {
-            return _repository.GetAllMapper();
+            var data =  _repository.GetAllJobPost();
+            return await data;
         }
-        /*public async Task<ActionResult<JobPost>> Get()
-        {
-            var data = _repository.GetAll();
-            return Ok(data);
-        }*/
         [HttpPost]
         public async Task<ActionResult<JobPostDTO>> Add(JobPostDTO jobpost)
         {
             await _repository.CreateJobPost(jobpost);
             return Ok(_repository.GetAll());
         }
+        /*
+        [HttpPost]
+        public async Task<ActionResult<JobPostDTO>> Add(JobPostDTO jobpost)
+        {
+            await _repository.CreateJobPostWithDto(jobpost);
+            return Ok(_repository.GetAll());
+        }
+        */
     }
 }

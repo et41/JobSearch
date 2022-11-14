@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221112164026_initial")]
-    partial class initial
+    [Migration("20221114204105_v2")]
+    partial class v2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,11 +26,11 @@ namespace JobApi.Migrations
 
             modelBuilder.Entity("JobApi.Models.JobCategory", b =>
                 {
-                    b.Property<int>("JobCategoryId")
+                    b.Property<int?>("JobCategoryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("JobCategoryId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("JobCategoryId"), 1L, 1);
 
                     b.Property<string>("JobCategoryName")
                         .IsRequired()
@@ -39,6 +39,13 @@ namespace JobApi.Migrations
                     b.HasKey("JobCategoryId");
 
                     b.ToTable("JobCategories");
+
+                    b.HasData(
+                        new
+                        {
+                            JobCategoryId = 1,
+                            JobCategoryName = "backend developer"
+                        });
                 });
 
             modelBuilder.Entity("JobApi.Models.JobLocation", b =>
@@ -63,6 +70,15 @@ namespace JobApi.Migrations
                     b.HasKey("JobLocationId");
 
                     b.ToTable("JobLocations");
+
+                    b.HasData(
+                        new
+                        {
+                            JobLocationId = 1,
+                            City = "Istanbul",
+                            Country = "Turkey",
+                            StreetAddress = "Buyukdere"
+                        });
                 });
 
             modelBuilder.Entity("JobApi.Models.JobPost", b =>
@@ -92,6 +108,10 @@ namespace JobApi.Migrations
                     b.Property<int?>("JobCategoryId")
                         .HasColumnType("int");
 
+                    b.Property<string>("JobCategoryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("JobLocationId")
                         .HasColumnType("int");
 
@@ -103,10 +123,6 @@ namespace JobApi.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("JobTypeName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Location")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -136,6 +152,13 @@ namespace JobApi.Migrations
                     b.HasKey("JobTypeId");
 
                     b.ToTable("JobTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            JobTypeId = 1,
+                            JobTypeName = "remote"
+                        });
                 });
 
             modelBuilder.Entity("JobApi.Models.JobPost", b =>

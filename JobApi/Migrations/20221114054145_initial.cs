@@ -66,6 +66,7 @@ namespace JobApi.Migrations
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     JobCategoryId = table.Column<int>(type: "int", nullable: true),
+                    JobCategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -87,6 +88,21 @@ namespace JobApi.Migrations
                         principalTable: "JobTypes",
                         principalColumn: "JobTypeId");
                 });
+
+            migrationBuilder.InsertData(
+                table: "JobCategories",
+                columns: new[] { "JobCategoryId", "JobCategoryName" },
+                values: new object[] { 1, "backend developer" });
+
+            migrationBuilder.InsertData(
+                table: "JobLocations",
+                columns: new[] { "JobLocationId", "City", "Country", "StreetAddress" },
+                values: new object[] { 1, "Istanbul", "Turkey", "Buyukdere" });
+
+            migrationBuilder.InsertData(
+                table: "JobTypes",
+                columns: new[] { "JobTypeId", "JobTypeName" },
+                values: new object[] { 1, "remote" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_JobPosts_JobCategoryId",

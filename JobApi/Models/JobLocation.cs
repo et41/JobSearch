@@ -1,4 +1,6 @@
-﻿namespace JobApi.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace JobApi.Models
 {
     public class JobLocation
     {

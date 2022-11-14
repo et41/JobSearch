@@ -5,6 +5,7 @@ namespace JobApi.DataAccess
     public interface IJobPostsRepository : IGenericRepository<JobPost>
     {
         Task CreateJobPost(JobPostDTO jobpost);
-        JobPost GetAllMapper();
+        Task<List<JobPost>> GetAllJobPost();
+        //JobPost GetAllMapper();
     }
 }

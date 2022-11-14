@@ -15,18 +15,53 @@ namespace JobApi.DataAccess
             _mapper = mapper;
             _context = context;
         }
-        
+
         public async Task CreateJobPost(JobPostDTO jobpost)
         {
-            var _mappedJobPost = _mapper.Map<JobPost>(jobpost);
-            await _context.Set<JobPost>().AddAsync(_mappedJobPost);
-            await _context.SaveChangesAsync();
-        }
-        public JobPost GetAllMapper()
+            if (jobpost != null)
+            {
+                var _mappedJobPost = _mapper.Map<JobPost>(jobpost);
+                // compare names and find the matching id if not create id
+                try
+                {
+                    var id = _context.JobCategories.First(s => s.JobCategoryName == jobpost.JobCategoryName).JobCategoryId;
+                    _mappedJobPost.JobCategoryId = id;
+                }
+                catch (Exception)
+                {
+                    _mappedJobPost.JobCategory = new JobCategory() { JobCategoryName = jobpost.JobCategoryName };
+                }
+                try
+                {
+                    var id = _context.JobTypes.First(s => s.JobTypeName == jobpost.JobTypeName).JobTypeId;
+                    _mappedJobPost.JobTypeId = id;
+                }
+                catch (Exception)
+                {
+                    _mappedJobPost.JobType = new JobType() { JobTypeName = jobpost.JobTypeName };
+                }
+                if (jobpost.JobLocation != null)
+                {
+                    try
+                    {
+                        _mappedJobPost.JobLocation = new JobLocation() { City = jobpost.JobLocation.City, Country = jobpost.JobLocation.Country, StreetAddress = jobpost.JobLocation.StreetAddress };
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
+                }
+                await _context.Set<JobPost>().AddAsync(_mappedJobPost);
+                await _context.SaveChangesAsync();
+            }
+        } 
+        public async Task<List<JobPost>> GetAllJobPost()
         {
-            var data = _context.Set<JobPost>().AsNoTracking();
-            return _mapper.Map<JobPost>(data);
-        }
 
+            var posts = await _context.Set<JobPost>()
+                .Include(c => c.JobType)
+                .Include(c => c.JobLocation).ToListAsync();
+            return posts;
+        }
     }
 }

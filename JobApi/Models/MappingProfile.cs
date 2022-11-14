@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.EquivalencyExpression;
 
 namespace JobApi.Models
 {
@@ -8,6 +9,8 @@ namespace JobApi.Models
         {
             CreateMap<JobPost, JobPostDTO>();
             CreateMap<JobPostDTO, JobPost>();
+            CreateMap<JobLocation, JobLocationDTO>();
+            CreateMap<JobLocationDTO, JobLocation>();
         }
     }
 }
