@@ -50,35 +50,33 @@ namespace JobApi.Controllers
             return _mapper.Map<JobCategoryDTO>(category);
         }
 
-        // PUT: api/JobCategories/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutJobCategory(int? id, JobCategory jobCategory)
+        [HttpPut]
+        public async Task UpdateJobCategory(JobCategoryDTO jobcategory)
         {
-            if (id != jobCategory.JobCategoryId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(jobCategory).State = EntityState.Modified;
-
             try
             {
+                JobCategory categoryToUpdate = await _context.JobCategories
+                    .Include(s => s.JobPosts)
+                    .FirstOrDefaultAsync(c => c.JobCategoryId == jobcategory.JobCategoryId);
+                if(categoryToUpdate != null)
+                {
+                    categoryToUpdate.JobCategoryId = jobcategory.JobCategoryId;
+                    categoryToUpdate.JobCategoryName = jobcategory.JobCategoryName;
+                }
+                var existingPosts = categoryToUpdate.JobPosts;
+                if(existingPosts != null)
+                {
+                    foreach(var post in existingPosts)
+                    {
+                        post.JobCategoryName = jobcategory.JobCategoryName;
+                    }
+                }
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception)
             {
-                if (!JobCategoryExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
-
-            return NoContent();
         }
 
         // POST: api/JobCategories
@@ -91,25 +89,5 @@ namespace JobApi.Controllers
             await _context.SaveChangesAsync();
         }
 
-        // DELETE: api/JobCategories/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteJobCategory(int? id)
-        {
-            var jobCategory = await _context.JobCategories.FindAsync(id);
-            if (jobCategory == null)
-            {
-                return NotFound();
-            }
-
-            _context.JobCategories.Remove(jobCategory);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool JobCategoryExists(int? id)
-        {
-            return _context.JobCategories.Any(e => e.JobCategoryId == id);
-        }
-    }
+       }
 }
