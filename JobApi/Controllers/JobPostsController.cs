@@ -34,7 +34,6 @@ namespace JobApi.Controllers
             {
                 return NotFound();
             }
-
             return Ok(jobPost);
         }
         [HttpPost]
@@ -44,7 +43,7 @@ namespace JobApi.Controllers
             return Ok(_repository.GetAll());
         }
         [HttpPut] 
-        public async Task  Update(JobPostGetDTO jobpost)
+        public async Task Update(JobPostGetDTO jobpost)
         {
             await _repository.UpdateJobPost(jobpost);
         }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using JobApi.DataAccess;
 using JobApi.Models;
+using AutoMapper;
 
 namespace JobApi.Controllers
 {
@@ -15,17 +16,23 @@ namespace JobApi.Controllers
     public class JobCategoriesController : ControllerBase
     {
         private readonly DataContext _context;
+        private readonly IMapper _mapper;
 
-        public JobCategoriesController(DataContext context)
+        public JobCategoriesController(DataContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/JobCategories
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<JobCategory>>> GetJobCategories()
+        public async Task<List<JobCategoryDTO>> GetJobCategories()
         {
-            return await _context.Set<JobCategory>().Include(c => c.JobPosts).ToListAsync();
+            var posts = await _context.Set<JobCategory>()
+                .Include(post => post.JobPosts)
+                .ThenInclude(post => post.JobLocation)
+                .ToListAsync();
+            return posts.Select(s => _mapper.Map<JobCategoryDTO>(s)).ToList();
         }
 
         // GET: api/JobCategories/5

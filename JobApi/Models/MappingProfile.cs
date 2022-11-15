@@ -13,6 +13,8 @@ namespace JobApi.Models
             CreateMap<JobLocationDTO, JobLocation>();
             CreateMap<JobPost, JobPostGetDTO>();
             CreateMap<JobPostGetDTO, JobPost>();
+            CreateMap<JobCategory, JobCategoryDTO>();
+            CreateMap<JobCategoryDTO, JobCategory>();
         }
     }
 }
