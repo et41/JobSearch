@@ -17,6 +17,9 @@ namespace JobApi.DataAccess
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.Entity<JobCategory>()
+                .HasIndex(category => category.JobCategoryName)
+                .IsUnique();
             builder.Entity<JobType>().HasData(
                 new JobType
                 {

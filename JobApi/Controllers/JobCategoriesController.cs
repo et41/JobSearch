@@ -42,7 +42,6 @@ namespace JobApi.Controllers
                 .Include(post => post.JobPosts)
                 .ThenInclude(post => post.JobLocation).FirstOrDefaultAsync();
             
-
             if (category == null)
             {
                 return NotFound();
@@ -85,12 +84,11 @@ namespace JobApi.Controllers
         // POST: api/JobCategories
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<JobCategory>> PostJobCategory(JobCategory jobCategory)
+        public async Task PostJobCategory(JobCategoryPostDTO jobCategory)
         {
-            _context.JobCategories.Add(jobCategory);
+            var mappedJobCategory = _mapper.Map<JobCategory>(jobCategory);
+            await _context.Set<JobCategory>().AddAsync(mappedJobCategory);
             await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetJobCategory", new { id = jobCategory.JobCategoryId }, jobCategory);
         }
 
         // DELETE: api/JobCategories/5
