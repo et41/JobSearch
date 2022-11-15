@@ -54,12 +54,12 @@ namespace JobApi.DataAccess
                 await _context.SaveChangesAsync();
             }
         } 
-        public async Task<List<JobPost>> GetAllJobPost()
+        public async Task<List<JobPostGetDTO>> GetAllJobPost()
         {
             var posts = await _context.Set<JobPost>()
                 .Include(c => c.JobType)
                 .Include(c => c.JobLocation).ToListAsync();
-            return posts;
+            return _mapper.Map<List<JobPostGetDTO>>(posts);
         }
         public async Task<JobPostGetDTO> GetByIdJobPost(int id)
         {

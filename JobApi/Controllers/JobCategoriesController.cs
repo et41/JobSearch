@@ -63,6 +63,7 @@ namespace JobApi.Controllers
                     categoryToUpdate.JobCategoryId = jobcategory.JobCategoryId;
                     categoryToUpdate.JobCategoryName = jobcategory.JobCategoryName;
                 }
+                //Check if posts exist under the category
                 var existingPosts = categoryToUpdate.JobPosts;
                 if(existingPosts != null)
                 {

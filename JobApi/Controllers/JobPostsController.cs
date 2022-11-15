@@ -18,11 +18,9 @@ namespace JobApi.Controllers
             _repository = repository;
         }
         [HttpGet]
-        public async Task<ActionResult<List<JobPost>>> Get()
+        public async Task<List<JobPostGetDTO>>Get()
         {
             var data =  await _repository.GetAllJobPost();
-            if (data == null)
-                return NotFound();
             return data;
         }
         [HttpGet("{id}")]

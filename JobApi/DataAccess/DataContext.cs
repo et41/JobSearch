@@ -20,6 +20,9 @@ namespace JobApi.DataAccess
             builder.Entity<JobCategory>()
                 .HasIndex(category => category.JobCategoryName)
                 .IsUnique();
+            builder.Entity<JobSkill>()
+                .HasIndex(skill => skill.SkillName)
+                .IsUnique();
             builder.Entity<JobType>().HasData(
                 new JobType
                 {
