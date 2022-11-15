@@ -24,29 +24,31 @@ namespace JobApi.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/JobCategories
         [HttpGet]
         public async Task<List<JobCategoryDTO>> GetJobCategories()
         {
-            var posts = await _context.Set<JobCategory>()
+            var categories = await _context.Set<JobCategory>()
                 .Include(post => post.JobPosts)
                 .ThenInclude(post => post.JobLocation)
                 .ToListAsync();
-            return posts.Select(s => _mapper.Map<JobCategoryDTO>(s)).ToList();
+            return categories.Select(s => _mapper.Map<JobCategoryDTO>(s)).ToList();
         }
 
-        // GET: api/JobCategories/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<JobCategory>> GetJobCategory(int? id)
+        public async Task<ActionResult<JobCategoryDTO>> GetJobCategory(int? id)
         {
-            var jobCategory = await _context.JobCategories.FindAsync(id);
+            var category = await _context.Set<JobCategory>()
+                .Where(s => s.JobCategoryId == id)
+                .Include(post => post.JobPosts)
+                .ThenInclude(post => post.JobLocation).FirstOrDefaultAsync();
+            
 
-            if (jobCategory == null)
+            if (category == null)
             {
                 return NotFound();
             }
 
-            return jobCategory;
+            return _mapper.Map<JobCategoryDTO>(category);
         }
 
         // PUT: api/JobCategories/5
