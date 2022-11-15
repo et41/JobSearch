@@ -25,7 +25,7 @@ namespace JobApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<JobCategory>>> GetJobCategories()
         {
-            return await _context.JobCategories.ToListAsync();
+            return await _context.Set<JobCategory>().Include(c => c.JobPosts).ToListAsync();
         }
 
         // GET: api/JobCategories/5

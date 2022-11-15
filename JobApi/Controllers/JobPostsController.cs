@@ -44,10 +44,14 @@ namespace JobApi.Controllers
             return Ok(_repository.GetAll());
         }
         [HttpPut] 
-        public async Task<ActionResult<JobPostDTO>> Update(JobPostDTO jobpost)
+        public async Task  Update(JobPostGetDTO jobpost)
         {
-            await _repository.Update(jobpost);
-
+            await _repository.UpdateJobPost(jobpost);
+        }
+        [HttpDelete("{id}")]
+        public async Task DeleteJobPost(int id)
+        {
+             await _repository.Delete(id);
         }
     }
 }

@@ -15,7 +15,6 @@ namespace JobApi.DataAccess
             _mapper = mapper;
             _context = context;
         }
-
         public async Task CreateJobPost(JobPostDTO jobpost)
         {
             if (jobpost != null)
@@ -68,6 +67,31 @@ namespace JobApi.DataAccess
                 .Include(c => c.JobLocation)
                 .Include(c => c.JobCategory).FirstOrDefaultAsync(e => e.Id == id);
             return _mapper.Map<JobPostGetDTO>(postById);
+        }
+        public async Task UpdateJobPost(JobPostGetDTO jobpost)
+        {
+            try
+            {
+                JobPost postToUpdate = await _context.JobPosts
+                    .FirstOrDefaultAsync(c => c.Id == jobpost.Id);
+                if(postToUpdate != null)
+                {
+                    postToUpdate.JobName = jobpost.JobName;
+                    postToUpdate.JobTypeName = jobpost.JobTypeName;
+                    postToUpdate.Description = jobpost.Description;
+                    postToUpdate.CompanyName = jobpost.CompanyName;
+                    postToUpdate.JobCategoryName = jobpost.JobCategoryName;
+                    postToUpdate.JobLocation = _mapper.Map<JobLocation>(jobpost.JobLocation);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public async Task DeleteJobPost(int id)
+        {
         }
     }
 }

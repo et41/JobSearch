@@ -8,8 +8,6 @@
         public string JobCategoryName { get; set; }
         public string? Description { get; set; }
         public virtual JobLocationDTO? JobLocation { get; set; }
-
         public string CompanyName { get; set; }
-
     }
 }

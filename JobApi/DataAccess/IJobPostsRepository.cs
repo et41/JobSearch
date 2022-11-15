@@ -7,7 +7,7 @@ namespace JobApi.DataAccess
         Task CreateJobPost(JobPostDTO jobpost);
         Task<List<JobPost>> GetAllJobPost();
         Task<JobPostGetDTO> GetByIdJobPost(int id);
-        Task UpdateJobPost(JobPostDTO jobpost);
+        Task UpdateJobPost(JobPostGetDTO jobpost);
         //JobPost GetAllMapper();
     }
 }
