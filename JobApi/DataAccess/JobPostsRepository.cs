@@ -50,12 +50,6 @@ namespace JobApi.DataAccess
                         throw;
                     }
                 }
-                /*
-                if(jobpost.JobSkill != null)
-                {
-                    JobSkill jobskills = _mapper.Map<JobSkill>(jobpost.JobSkill);
-
-                }*/
                 await _context.Set<JobPost>().AddAsync(_mappedJobPost);
                 await _context.SaveChangesAsync();
             }
@@ -64,14 +58,18 @@ namespace JobApi.DataAccess
         {
             var posts = await _context.Set<JobPost>()
                 .Include(c => c.JobType)
-                .Include(c => c.JobLocation).ToListAsync();
+                .Include(c => c.JobLocation)
+                .Include(c => c.JobSkills)
+                .ToListAsync();
             return _mapper.Map<List<JobPostGetDTO>>(posts);
         }
         public async Task<JobPostGetDTO> GetByIdJobPost(int id)
         {
             var postById = await _context.Set<JobPost>()
                 .Include(c => c.JobLocation)
-                .Include(c => c.JobCategory).FirstOrDefaultAsync(e => e.Id == id);
+                .Include(c => c.JobCategory)
+                .Include(c => c.JobSkills)
+                .FirstOrDefaultAsync(e => e.Id == id);
             return _mapper.Map<JobPostGetDTO>(postById);
         }
         public async Task UpdateJobPost(JobPostGetDTO jobpost)
