@@ -50,6 +50,12 @@ namespace JobApi.DataAccess
                         throw;
                     }
                 }
+                /*
+                if(jobpost.JobSkill != null)
+                {
+                    JobSkill jobskills = _mapper.Map<JobSkill>(jobpost.JobSkill);
+
+                }*/
                 await _context.Set<JobPost>().AddAsync(_mappedJobPost);
                 await _context.SaveChangesAsync();
             }

@@ -14,6 +14,7 @@ namespace JobApi.DataAccess
         public DbSet<JobCategory> JobCategories { get; set; }  
         public DbSet<JobLocation> JobLocations { get; set; }
         public DbSet<JobType> JobTypes { get; set; } 
+        public DbSet<JobSkill> JobSkills { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -43,6 +44,19 @@ namespace JobApi.DataAccess
                     City = "Istanbul",
                     Country = "Turkey",
                 });
+           /* builder.Entity<JobSkill>().HasData(
+                new JobSkill
+                {
+                    JobSkillId = 1,
+                    SkillName = "C#"
+                });
+            builder.Entity<JobSkill>().HasData(
+                new JobSkill
+                {
+                    JobSkillId = 2,
+                    SkillName = "Python"
+                });*/
+
         }
     }
 }

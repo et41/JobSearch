@@ -120,9 +120,6 @@ namespace JobApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("JobSkillId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("JobTypeId")
                         .HasColumnType("int");
 
@@ -158,7 +155,7 @@ namespace JobApi.Migrations
                     b.HasIndex("SkillName")
                         .IsUnique();
 
-                    b.ToTable("JobSkill");
+                    b.ToTable("JobSkills");
                 });
 
             modelBuilder.Entity("JobApi.Models.JobType", b =>
@@ -190,12 +187,12 @@ namespace JobApi.Migrations
                     b.Property<int>("JobPostsId")
                         .HasColumnType("int");
 
-                    b.Property<int>("JobSkillId")
+                    b.Property<int>("JobSkillsJobSkillId")
                         .HasColumnType("int");
 
-                    b.HasKey("JobPostsId", "JobSkillId");
+                    b.HasKey("JobPostsId", "JobSkillsJobSkillId");
 
-                    b.HasIndex("JobSkillId");
+                    b.HasIndex("JobSkillsJobSkillId");
 
                     b.ToTable("JobPostJobSkill");
                 });
@@ -231,7 +228,7 @@ namespace JobApi.Migrations
 
                     b.HasOne("JobApi.Models.JobSkill", null)
                         .WithMany()
-                        .HasForeignKey("JobSkillId")
+                        .HasForeignKey("JobSkillsJobSkillId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

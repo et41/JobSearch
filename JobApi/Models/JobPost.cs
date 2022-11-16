@@ -15,8 +15,7 @@
         public virtual JobLocation? JobLocation { get; set; }
         public int? JobTypeId { get; set; }
         public virtual JobType? JobType { get; set; }
-        public int? JobSkillId { get; set; }
-        public virtual ICollection<JobSkill>? JobSkill { get; set; }
+        public virtual ICollection<JobSkill>? JobSkills { get; set; }
 
     }
 }

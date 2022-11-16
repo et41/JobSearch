@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221115210451_skills")]
-    partial class skills
+    [Migration("20221116005842_v5")]
+    partial class v5
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -122,9 +122,6 @@ namespace JobApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("JobSkillId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("JobTypeId")
                         .HasColumnType("int");
 
@@ -153,11 +150,14 @@ namespace JobApi.Migrations
 
                     b.Property<string>("SkillName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("JobSkillId");
 
-                    b.ToTable("JobSkill");
+                    b.HasIndex("SkillName")
+                        .IsUnique();
+
+                    b.ToTable("JobSkills");
                 });
 
             modelBuilder.Entity("JobApi.Models.JobType", b =>
@@ -189,12 +189,12 @@ namespace JobApi.Migrations
                     b.Property<int>("JobPostsId")
                         .HasColumnType("int");
 
-                    b.Property<int>("JobSkillId")
+                    b.Property<int>("JobSkillsJobSkillId")
                         .HasColumnType("int");
 
-                    b.HasKey("JobPostsId", "JobSkillId");
+                    b.HasKey("JobPostsId", "JobSkillsJobSkillId");
 
-                    b.HasIndex("JobSkillId");
+                    b.HasIndex("JobSkillsJobSkillId");
 
                     b.ToTable("JobPostJobSkill");
                 });
@@ -230,7 +230,7 @@ namespace JobApi.Migrations
 
                     b.HasOne("JobApi.Models.JobSkill", null)
                         .WithMany()
-                        .HasForeignKey("JobSkillId")
+                        .HasForeignKey("JobSkillsJobSkillId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -7,6 +7,7 @@
         public string? Description { get; set; }
         public string CompanyName { get; set; }
         public virtual JobLocationDTO? JobLocation { get; set; }   
+        public virtual ICollection<JobSkillDTO>? JobSkill { get; set; }
         public string JobCategoryName { get; set; }
     }
 }
