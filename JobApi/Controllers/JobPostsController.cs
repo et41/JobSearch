@@ -1,5 +1,6 @@
 ﻿using JobApi.DataAccess;
-using JobApi.Models;
+using JobApi.Models.DTOS.JobPostDTOS;
+using JobApi.Models.JobPostModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

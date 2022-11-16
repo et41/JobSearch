@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace JobApi.Models
+namespace JobApi.Models.JobPostModels
 {
     public class JobLocation
     {

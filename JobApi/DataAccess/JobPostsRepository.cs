@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
-using JobApi.Models;
+using JobApi.Models.DTOS.JobPostDTOS;
+using JobApi.Models.JobPostModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using System.Text.Json.Serialization;
 
 namespace JobApi.DataAccess
 {
@@ -76,8 +78,7 @@ namespace JobApi.DataAccess
         {
             try
             {
-                JobPost postToUpdate = await _context.JobPosts
-                    .FirstOrDefaultAsync(c => c.Id == jobpost.Id);
+                JobPost postToUpdate = await _context.JobPosts.Include(p => p.JobSkills).FirstOrDefaultAsync(c => c.Id == jobpost.Id);
                 if(postToUpdate != null)
                 {
                     postToUpdate.JobName = jobpost.JobName;
@@ -86,6 +87,14 @@ namespace JobApi.DataAccess
                     postToUpdate.CompanyName = jobpost.CompanyName;
                     postToUpdate.JobCategoryName = jobpost.JobCategoryName;
                     postToUpdate.JobLocation = _mapper.Map<JobLocation>(jobpost.JobLocation);
+                    if(jobpost.JobSkills != null)
+                    {
+                        foreach (var item in postToUpdate.JobSkills.ToList())
+                        {
+                            postToUpdate.JobSkills.Remove(item);
+                        }
+                        postToUpdate.JobSkills = _mapper.Map<ICollection<JobSkill>>(jobpost.JobSkills);
+                    }
                     await _context.SaveChangesAsync();
                 }
             }

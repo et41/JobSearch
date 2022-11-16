@@ -6,8 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using JobApi.DataAccess;
-using JobApi.Models;
 using AutoMapper;
+using JobApi.Models.DTOS.JobPostDTOS;
+using JobApi.Models.JobPostModels;
 
 namespace JobApi.Controllers
 {

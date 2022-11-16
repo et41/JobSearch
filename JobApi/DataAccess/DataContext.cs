@@ -1,4 +1,5 @@
 ﻿using JobApi.Models;
+using JobApi.Models.JobPostModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace JobApi.DataAccess
@@ -15,6 +16,12 @@ namespace JobApi.DataAccess
         public DbSet<JobLocation> JobLocations { get; set; }
         public DbSet<JobType> JobTypes { get; set; } 
         public DbSet<JobSkill> JobSkills { get; set; }
+        public DbSet<SeekerProfile> SeekerProfiles { get; set; }
+        public DbSet<SeekerSkill> SeekerSkills { get; set; }
+        public DbSet<SeekerEducationDetail> SeekerEducationDetails { get; set; }    
+        public DbSet<SeekerExperienceDetail> SeekerExperienceDetails { get; set; }
+        public DbSet<Company> Companies { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

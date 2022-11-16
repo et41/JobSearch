@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
 using AutoMapper.EquivalencyExpression;
+using JobApi.Models.DTOS.CompanyDTOS;
+using JobApi.Models.DTOS.JobPostDTOS;
+using JobApi.Models.JobPostModels;
 using Microsoft.Build.Framework;
 
 namespace JobApi.Models
@@ -20,6 +23,9 @@ namespace JobApi.Models
             CreateMap<JobCategory, JobCategoryPostDTO>();
             CreateMap<JobSkill, JobSkillDTO>();
             CreateMap<JobSkillDTO, JobSkill>();
+            CreateMap<Company, CompanyPostDTO>();
+            CreateMap<CompanyPostDTO, Company>();
+
         }
     }
 }

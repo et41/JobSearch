@@ -4,6 +4,7 @@ using JobApi.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20221116060442_v6")]
+    partial class v6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,7 +53,7 @@ namespace JobApi.Migrations
                     b.ToTable("Companies");
                 });
 
-            modelBuilder.Entity("JobApi.Models.JobPostModels.JobCategory", b =>
+            modelBuilder.Entity("JobApi.Models.JobCategory", b =>
                 {
                     b.Property<int?>("JobCategoryId")
                         .ValueGeneratedOnAdd()
@@ -78,7 +80,7 @@ namespace JobApi.Migrations
                         });
                 });
 
-            modelBuilder.Entity("JobApi.Models.JobPostModels.JobLocation", b =>
+            modelBuilder.Entity("JobApi.Models.JobLocation", b =>
                 {
                     b.Property<int>("JobLocationId")
                         .ValueGeneratedOnAdd()
@@ -111,7 +113,7 @@ namespace JobApi.Migrations
                         });
                 });
 
-            modelBuilder.Entity("JobApi.Models.JobPostModels.JobPost", b =>
+            modelBuilder.Entity("JobApi.Models.JobPost", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -169,7 +171,7 @@ namespace JobApi.Migrations
                     b.ToTable("JobPosts");
                 });
 
-            modelBuilder.Entity("JobApi.Models.JobPostModels.JobSkill", b =>
+            modelBuilder.Entity("JobApi.Models.JobSkill", b =>
                 {
                     b.Property<int>("JobSkillId")
                         .ValueGeneratedOnAdd()
@@ -189,7 +191,7 @@ namespace JobApi.Migrations
                     b.ToTable("JobSkills");
                 });
 
-            modelBuilder.Entity("JobApi.Models.JobPostModels.JobType", b =>
+            modelBuilder.Entity("JobApi.Models.JobType", b =>
                 {
                     b.Property<int>("JobTypeId")
                         .ValueGeneratedOnAdd()
@@ -343,21 +345,21 @@ namespace JobApi.Migrations
                     b.ToTable("SeekerProfileSeekerSkill");
                 });
 
-            modelBuilder.Entity("JobApi.Models.JobPostModels.JobPost", b =>
+            modelBuilder.Entity("JobApi.Models.JobPost", b =>
                 {
                     b.HasOne("JobApi.Models.Company", "Company")
-                        .WithMany("JobPosts")
+                        .WithMany()
                         .HasForeignKey("CompanyId");
 
-                    b.HasOne("JobApi.Models.JobPostModels.JobCategory", "JobCategory")
+                    b.HasOne("JobApi.Models.JobCategory", "JobCategory")
                         .WithMany("JobPosts")
                         .HasForeignKey("JobCategoryId");
 
-                    b.HasOne("JobApi.Models.JobPostModels.JobLocation", "JobLocation")
+                    b.HasOne("JobApi.Models.JobLocation", "JobLocation")
                         .WithMany("JobPosts")
                         .HasForeignKey("JobLocationId");
 
-                    b.HasOne("JobApi.Models.JobPostModels.JobType", "JobType")
+                    b.HasOne("JobApi.Models.JobType", "JobType")
                         .WithMany("JobPosts")
                         .HasForeignKey("JobTypeId");
 
@@ -389,7 +391,7 @@ namespace JobApi.Migrations
 
             modelBuilder.Entity("JobApi.Models.SeekerSkill", b =>
                 {
-                    b.HasOne("JobApi.Models.JobPostModels.JobSkill", "JobSkill")
+                    b.HasOne("JobApi.Models.JobSkill", "JobSkill")
                         .WithMany()
                         .HasForeignKey("JobSkillId");
 
@@ -398,13 +400,13 @@ namespace JobApi.Migrations
 
             modelBuilder.Entity("JobPostJobSkill", b =>
                 {
-                    b.HasOne("JobApi.Models.JobPostModels.JobPost", null)
+                    b.HasOne("JobApi.Models.JobPost", null)
                         .WithMany()
                         .HasForeignKey("JobPostsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("JobApi.Models.JobPostModels.JobSkill", null)
+                    b.HasOne("JobApi.Models.JobSkill", null)
                         .WithMany()
                         .HasForeignKey("JobSkillsJobSkillId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -426,22 +428,17 @@ namespace JobApi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("JobApi.Models.Company", b =>
+            modelBuilder.Entity("JobApi.Models.JobCategory", b =>
                 {
                     b.Navigation("JobPosts");
                 });
 
-            modelBuilder.Entity("JobApi.Models.JobPostModels.JobCategory", b =>
+            modelBuilder.Entity("JobApi.Models.JobLocation", b =>
                 {
                     b.Navigation("JobPosts");
                 });
 
-            modelBuilder.Entity("JobApi.Models.JobPostModels.JobLocation", b =>
-                {
-                    b.Navigation("JobPosts");
-                });
-
-            modelBuilder.Entity("JobApi.Models.JobPostModels.JobType", b =>
+            modelBuilder.Entity("JobApi.Models.JobType", b =>
                 {
                     b.Navigation("JobPosts");
                 });

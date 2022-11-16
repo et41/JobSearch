@@ -1,4 +1,5 @@
-﻿using JobApi.Models;
+﻿using JobApi.Models.DTOS.JobPostDTOS;
+using JobApi.Models.JobPostModels;
 
 namespace JobApi.DataAccess
 {
