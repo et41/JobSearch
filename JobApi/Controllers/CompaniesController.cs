@@ -10,6 +10,7 @@ using JobApi.Models;
 using JobApi.Models.DTOS.CompanyDTOS;
 using AutoMapper;
 using JobApi.Models.DTOS.JobPostDTOS;
+using AutoMapper.QueryableExtensions;
 
 namespace JobApi.Controllers
 {
@@ -26,30 +27,28 @@ namespace JobApi.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/Companies
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Company>>> GetCompanies()
+        public async Task<ActionResult<IEnumerable<CompanyGetDTO>>> GetCompanies()
         {
-            var data = await _context.Companies.Include(p => p.JobPosts).ToListAsync();
+            //var data = await _context.Companies.Include(p => p.JobPosts).ThenInclude(p => p.JobSkills)
+            //    .Select(s => _mapper.Map<ICollection<JobSkillDTO>>(s.JobPosts.SelectMany(s => s.JobSkills))).ToListAsync();
+            var data = await _context.Companies.Include(p => p.JobPosts).ThenInclude(p => p.JobSkills).ToListAsync();
             return Ok(data);
         }
 
-        // GET: api/Companies/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Company>> GetCompany(int id)
+        public async Task<ActionResult<CompanyGetDTO>> GetCompany(int id)
         {
-            var company = await _context.Companies.Include(p => p.JobPosts).FirstOrDefaultAsync(e => e.CompanyId == id);
+            var company = await _context.Companies.Include(p => p.JobPosts).ThenInclude(p => p.JobSkills).FirstOrDefaultAsync(e => e.CompanyId == id);
 
             if (company == null)
             {
                 return NotFound();
             }
 
-            return company;
+            return Ok(company);
         }
 
-        // PUT: api/Companies/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCompany(int id, Company company)
         {
@@ -79,8 +78,6 @@ namespace JobApi.Controllers
             return NoContent();
         }
 
-        // POST: api/Companies
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Company>> PostCompany(CompanyPostDTO company)
         {
@@ -92,7 +89,6 @@ namespace JobApi.Controllers
             return Ok();
         }
 
-        // DELETE: api/Companies/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCompany(int id)
         {

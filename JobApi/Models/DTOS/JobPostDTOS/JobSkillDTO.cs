@@ -1,9 +1,11 @@
-﻿namespace JobApi.Models.DTOS.JobPostDTOS
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace JobApi.Models.DTOS.JobPostDTOS
 {
     public class JobSkillDTO
     {
-        public int JobSkillId { get; set; }
-
+        [Key]
+        public int? JobSkillId { get; set; }
         public string SkillName { get; set; }
     }
 }

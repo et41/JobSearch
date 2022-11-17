@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221116060442_v6")]
-    partial class v6
+    [Migration("20221117011836_v12")]
+    partial class v12
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -53,7 +53,7 @@ namespace JobApi.Migrations
                     b.ToTable("Companies");
                 });
 
-            modelBuilder.Entity("JobApi.Models.JobCategory", b =>
+            modelBuilder.Entity("JobApi.Models.JobPostModels.JobCategory", b =>
                 {
                     b.Property<int?>("JobCategoryId")
                         .ValueGeneratedOnAdd()
@@ -80,7 +80,7 @@ namespace JobApi.Migrations
                         });
                 });
 
-            modelBuilder.Entity("JobApi.Models.JobLocation", b =>
+            modelBuilder.Entity("JobApi.Models.JobPostModels.JobLocation", b =>
                 {
                     b.Property<int>("JobLocationId")
                         .ValueGeneratedOnAdd()
@@ -113,7 +113,7 @@ namespace JobApi.Migrations
                         });
                 });
 
-            modelBuilder.Entity("JobApi.Models.JobPost", b =>
+            modelBuilder.Entity("JobApi.Models.JobPostModels.JobPost", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -171,13 +171,13 @@ namespace JobApi.Migrations
                     b.ToTable("JobPosts");
                 });
 
-            modelBuilder.Entity("JobApi.Models.JobSkill", b =>
+            modelBuilder.Entity("JobApi.Models.JobPostModels.JobSkill", b =>
                 {
-                    b.Property<int>("JobSkillId")
+                    b.Property<int?>("JobSkillId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("JobSkillId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("JobSkillId"), 1L, 1);
 
                     b.Property<string>("SkillName")
                         .IsRequired()
@@ -191,7 +191,7 @@ namespace JobApi.Migrations
                     b.ToTable("JobSkills");
                 });
 
-            modelBuilder.Entity("JobApi.Models.JobType", b =>
+            modelBuilder.Entity("JobApi.Models.JobPostModels.JobType", b =>
                 {
                     b.Property<int>("JobTypeId")
                         .ValueGeneratedOnAdd()
@@ -253,9 +253,6 @@ namespace JobApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SeekerProfieId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("isWorking")
                         .HasColumnType("bit");
 
@@ -266,11 +263,11 @@ namespace JobApi.Migrations
 
             modelBuilder.Entity("JobApi.Models.SeekerProfile", b =>
                 {
-                    b.Property<int>("SeekerProfileId")
+                    b.Property<int?>("SeekerProfileId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SeekerProfileId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("SeekerProfileId"), 1L, 1);
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -280,7 +277,7 @@ namespace JobApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SeekerEducationDetailId")
+                    b.Property<int?>("SeekerEducationDetailId")
                         .HasColumnType("int");
 
                     b.Property<int?>("SeekerExperienceDetailId")
@@ -290,9 +287,7 @@ namespace JobApi.Migrations
 
                     b.HasIndex("SeekerEducationDetailId");
 
-                    b.HasIndex("SeekerExperienceDetailId")
-                        .IsUnique()
-                        .HasFilter("[SeekerExperienceDetailId] IS NOT NULL");
+                    b.HasIndex("SeekerExperienceDetailId");
 
                     b.ToTable("SeekerProfiles");
                 });
@@ -308,9 +303,15 @@ namespace JobApi.Migrations
                     b.Property<int?>("JobSkillId")
                         .HasColumnType("int");
 
+                    b.Property<string>("SeekerSkillName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("SeekerSkillId");
 
-                    b.HasIndex("JobSkillId");
+                    b.HasIndex("JobSkillId")
+                        .IsUnique()
+                        .HasFilter("[JobSkillId] IS NOT NULL");
 
                     b.ToTable("SeekerSkills");
                 });
@@ -332,34 +333,34 @@ namespace JobApi.Migrations
 
             modelBuilder.Entity("SeekerProfileSeekerSkill", b =>
                 {
-                    b.Property<int>("SeekerSkilsSeekerSkillId")
+                    b.Property<int>("SeekerSkillsSeekerSkillId")
                         .HasColumnType("int");
 
                     b.Property<int>("seekerProfilesSeekerProfileId")
                         .HasColumnType("int");
 
-                    b.HasKey("SeekerSkilsSeekerSkillId", "seekerProfilesSeekerProfileId");
+                    b.HasKey("SeekerSkillsSeekerSkillId", "seekerProfilesSeekerProfileId");
 
                     b.HasIndex("seekerProfilesSeekerProfileId");
 
                     b.ToTable("SeekerProfileSeekerSkill");
                 });
 
-            modelBuilder.Entity("JobApi.Models.JobPost", b =>
+            modelBuilder.Entity("JobApi.Models.JobPostModels.JobPost", b =>
                 {
                     b.HasOne("JobApi.Models.Company", "Company")
-                        .WithMany()
+                        .WithMany("JobPosts")
                         .HasForeignKey("CompanyId");
 
-                    b.HasOne("JobApi.Models.JobCategory", "JobCategory")
+                    b.HasOne("JobApi.Models.JobPostModels.JobCategory", "JobCategory")
                         .WithMany("JobPosts")
                         .HasForeignKey("JobCategoryId");
 
-                    b.HasOne("JobApi.Models.JobLocation", "JobLocation")
+                    b.HasOne("JobApi.Models.JobPostModels.JobLocation", "JobLocation")
                         .WithMany("JobPosts")
                         .HasForeignKey("JobLocationId");
 
-                    b.HasOne("JobApi.Models.JobType", "JobType")
+                    b.HasOne("JobApi.Models.JobPostModels.JobType", "JobType")
                         .WithMany("JobPosts")
                         .HasForeignKey("JobTypeId");
 
@@ -376,13 +377,11 @@ namespace JobApi.Migrations
                 {
                     b.HasOne("JobApi.Models.SeekerEducationDetail", "SeekerEducationDetail")
                         .WithMany()
-                        .HasForeignKey("SeekerEducationDetailId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SeekerEducationDetailId");
 
                     b.HasOne("JobApi.Models.SeekerExperienceDetail", "SeekerExperienceDetail")
-                        .WithOne("SeekerProfile")
-                        .HasForeignKey("JobApi.Models.SeekerProfile", "SeekerExperienceDetailId");
+                        .WithMany()
+                        .HasForeignKey("SeekerExperienceDetailId");
 
                     b.Navigation("SeekerEducationDetail");
 
@@ -391,22 +390,22 @@ namespace JobApi.Migrations
 
             modelBuilder.Entity("JobApi.Models.SeekerSkill", b =>
                 {
-                    b.HasOne("JobApi.Models.JobSkill", "JobSkill")
-                        .WithMany()
-                        .HasForeignKey("JobSkillId");
+                    b.HasOne("JobApi.Models.JobPostModels.JobSkill", "JobSkill")
+                        .WithOne("SeekerSkill")
+                        .HasForeignKey("JobApi.Models.SeekerSkill", "JobSkillId");
 
                     b.Navigation("JobSkill");
                 });
 
             modelBuilder.Entity("JobPostJobSkill", b =>
                 {
-                    b.HasOne("JobApi.Models.JobPost", null)
+                    b.HasOne("JobApi.Models.JobPostModels.JobPost", null)
                         .WithMany()
                         .HasForeignKey("JobPostsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("JobApi.Models.JobSkill", null)
+                    b.HasOne("JobApi.Models.JobPostModels.JobSkill", null)
                         .WithMany()
                         .HasForeignKey("JobSkillsJobSkillId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -417,7 +416,7 @@ namespace JobApi.Migrations
                 {
                     b.HasOne("JobApi.Models.SeekerSkill", null)
                         .WithMany()
-                        .HasForeignKey("SeekerSkilsSeekerSkillId")
+                        .HasForeignKey("SeekerSkillsSeekerSkillId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -428,24 +427,29 @@ namespace JobApi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("JobApi.Models.JobCategory", b =>
+            modelBuilder.Entity("JobApi.Models.Company", b =>
                 {
                     b.Navigation("JobPosts");
                 });
 
-            modelBuilder.Entity("JobApi.Models.JobLocation", b =>
+            modelBuilder.Entity("JobApi.Models.JobPostModels.JobCategory", b =>
                 {
                     b.Navigation("JobPosts");
                 });
 
-            modelBuilder.Entity("JobApi.Models.JobType", b =>
+            modelBuilder.Entity("JobApi.Models.JobPostModels.JobLocation", b =>
                 {
                     b.Navigation("JobPosts");
                 });
 
-            modelBuilder.Entity("JobApi.Models.SeekerExperienceDetail", b =>
+            modelBuilder.Entity("JobApi.Models.JobPostModels.JobSkill", b =>
                 {
-                    b.Navigation("SeekerProfile");
+                    b.Navigation("SeekerSkill");
+                });
+
+            modelBuilder.Entity("JobApi.Models.JobPostModels.JobType", b =>
+                {
+                    b.Navigation("JobPosts");
                 });
 #pragma warning restore 612, 618
         }

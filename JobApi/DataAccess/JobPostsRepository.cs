@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using JobApi.Models;
 using JobApi.Models.DTOS.JobPostDTOS;
 using JobApi.Models.JobPostModels;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,25 @@ namespace JobApi.DataAccess
         }
         public async Task CreateJobPost(JobPostDTO jobpost)
         {
+            if(jobpost != null)
+            {
+                JobPost mappedPost = new JobPost()
+                {
+                    JobName = jobpost.JobName,
+                    JobTypeName = jobpost.JobTypeName,
+                    CompanyName = jobpost.CompanyName,
+                    Description = jobpost.Description,
+                    JobCategoryName = jobpost.JobCategoryName,
+                    JobCategory = new JobCategory() { JobCategoryName = jobpost.JobCategoryName },
+                    JobLocation = _mapper.Map<JobLocation>(jobpost.JobLocation),
+                    JobType = new JobType() { JobTypeName = jobpost.JobTypeName },
+                    JobSkills = _mapper.Map<ICollection<JobSkill>>(jobpost.JobSkill),
+                };
+                await _context.Set<JobPost>().AddAsync(mappedPost);
+                await _context.SaveChangesAsync();
+
+            }
+            /*
             if (jobpost != null)
             {
                 var _mappedJobPost = _mapper.Map<JobPost>(jobpost);
@@ -51,11 +71,8 @@ namespace JobApi.DataAccess
                     {
                         throw;
                     }
-                }
-                await _context.Set<JobPost>().AddAsync(_mappedJobPost);
-                await _context.SaveChangesAsync();
-            }
-        } 
+                }*/
+         } 
         public async Task<List<JobPostGetDTO>> GetAllJobPost()
         {
             var posts = await _context.Set<JobPost>()

@@ -2,6 +2,7 @@
 using AutoMapper.EquivalencyExpression;
 using JobApi.Models.DTOS.CompanyDTOS;
 using JobApi.Models.DTOS.JobPostDTOS;
+using JobApi.Models.DTOS.SeekerDTOS;
 using JobApi.Models.JobPostModels;
 using Microsoft.Build.Framework;
 
@@ -21,11 +22,28 @@ namespace JobApi.Models
             CreateMap<JobCategoryDTO, JobCategory>();
             CreateMap<JobCategoryPostDTO, JobCategory>();
             CreateMap<JobCategory, JobCategoryPostDTO>();
-            CreateMap<JobSkill, JobSkillDTO>();
-            CreateMap<JobSkillDTO, JobSkill>();
+
+            CreateMap<JobSkill, JobSkillDTO>().ForMember(dest => dest.JobSkillId, opt => opt.MapFrom(src => src.JobSkillId));
+            CreateMap<JobSkillDTO, JobSkill>().ForMember(dest => dest.JobSkillId, opt => opt.MapFrom(src => src.JobSkillId));
+
+            //CreateMap<JobSkill, JobSkillDTO>();
+            ///CreateMap<JobSkillDTO, JobSkill>();
             CreateMap<Company, CompanyPostDTO>();
             CreateMap<CompanyPostDTO, Company>();
+            CreateMap<Company, CompanyGetDTO>();
+            CreateMap<CompanyGetDTO, Company>();
 
+            CreateMap<SeekerProfilePostDTO, SeekerProfile>().ForMember(dest => dest.SeekerSkills, opt => opt.MapFrom(src => src.SeekerSkills)); 
+            CreateMap<SeekerProfile, SeekerProfilePostDTO>().ForMember(dest => dest.SeekerSkills, opt => opt.MapFrom(src => src.SeekerSkills));
+
+            CreateMap<SeekerSkillDTO, SeekerSkill>();
+            CreateMap<SeekerSkill, SeekerSkillDTO>();
+
+            CreateMap<SeekerEducationDetailDTO, SeekerEducationDetail>();
+            CreateMap<SeekerEducationDetail, SeekerEducationDetailDTO>();
+
+            CreateMap<SeekerExperienceDetailDTO, SeekerExperienceDetail>();
+            CreateMap<SeekerExperienceDetail, SeekerExperienceDetailDTO>();
         }
     }
 }

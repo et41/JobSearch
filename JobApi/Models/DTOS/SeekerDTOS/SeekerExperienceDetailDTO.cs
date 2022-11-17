@@ -1,11 +1,9 @@
-﻿namespace JobApi.Models
+﻿namespace JobApi.Models.DTOS.SeekerDTOS
 {
-    public class SeekerExperienceDetail
+    public class SeekerExperienceDetailDTO
     {
-        public int SeekerExperienceDetailId { get; set; }
         public string JobTitle { get; set; }
         public bool isWorking { get; set; }
         public int ExperienceYear { get; set; }
-
     }
 }

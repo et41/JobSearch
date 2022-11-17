@@ -12,7 +12,7 @@ using JobApi.Models.JobPostModels;
 
 namespace JobApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/jobs/[controller]")]
     [ApiController]
     public class JobCategoriesController : ControllerBase
     {

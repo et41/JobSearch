@@ -11,6 +11,6 @@ namespace JobApi.Models.DTOS.CompanyDTOS
         public string CompanyURL { get; set; }
         public string Sector { get; set; }
         public virtual ICollection<JobPostGetDTO>? JobPosts { get; set; }
-
+        public List<string> SkillsMapped { get; set; }
     }
 }

@@ -171,11 +171,11 @@ namespace JobApi.Migrations
 
             modelBuilder.Entity("JobApi.Models.JobPostModels.JobSkill", b =>
                 {
-                    b.Property<int>("JobSkillId")
+                    b.Property<int?>("JobSkillId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("JobSkillId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("JobSkillId"), 1L, 1);
 
                     b.Property<string>("SkillName")
                         .IsRequired()
@@ -251,9 +251,6 @@ namespace JobApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SeekerProfieId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("isWorking")
                         .HasColumnType("bit");
 
@@ -264,11 +261,11 @@ namespace JobApi.Migrations
 
             modelBuilder.Entity("JobApi.Models.SeekerProfile", b =>
                 {
-                    b.Property<int>("SeekerProfileId")
+                    b.Property<int?>("SeekerProfileId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SeekerProfileId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("SeekerProfileId"), 1L, 1);
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -278,7 +275,7 @@ namespace JobApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SeekerEducationDetailId")
+                    b.Property<int?>("SeekerEducationDetailId")
                         .HasColumnType("int");
 
                     b.Property<int?>("SeekerExperienceDetailId")
@@ -288,9 +285,7 @@ namespace JobApi.Migrations
 
                     b.HasIndex("SeekerEducationDetailId");
 
-                    b.HasIndex("SeekerExperienceDetailId")
-                        .IsUnique()
-                        .HasFilter("[SeekerExperienceDetailId] IS NOT NULL");
+                    b.HasIndex("SeekerExperienceDetailId");
 
                     b.ToTable("SeekerProfiles");
                 });
@@ -306,9 +301,15 @@ namespace JobApi.Migrations
                     b.Property<int?>("JobSkillId")
                         .HasColumnType("int");
 
+                    b.Property<string>("SeekerSkillName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("SeekerSkillId");
 
-                    b.HasIndex("JobSkillId");
+                    b.HasIndex("JobSkillId")
+                        .IsUnique()
+                        .HasFilter("[JobSkillId] IS NOT NULL");
 
                     b.ToTable("SeekerSkills");
                 });
@@ -330,13 +331,13 @@ namespace JobApi.Migrations
 
             modelBuilder.Entity("SeekerProfileSeekerSkill", b =>
                 {
-                    b.Property<int>("SeekerSkilsSeekerSkillId")
+                    b.Property<int>("SeekerSkillsSeekerSkillId")
                         .HasColumnType("int");
 
                     b.Property<int>("seekerProfilesSeekerProfileId")
                         .HasColumnType("int");
 
-                    b.HasKey("SeekerSkilsSeekerSkillId", "seekerProfilesSeekerProfileId");
+                    b.HasKey("SeekerSkillsSeekerSkillId", "seekerProfilesSeekerProfileId");
 
                     b.HasIndex("seekerProfilesSeekerProfileId");
 
@@ -374,13 +375,11 @@ namespace JobApi.Migrations
                 {
                     b.HasOne("JobApi.Models.SeekerEducationDetail", "SeekerEducationDetail")
                         .WithMany()
-                        .HasForeignKey("SeekerEducationDetailId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SeekerEducationDetailId");
 
                     b.HasOne("JobApi.Models.SeekerExperienceDetail", "SeekerExperienceDetail")
-                        .WithOne("SeekerProfile")
-                        .HasForeignKey("JobApi.Models.SeekerProfile", "SeekerExperienceDetailId");
+                        .WithMany()
+                        .HasForeignKey("SeekerExperienceDetailId");
 
                     b.Navigation("SeekerEducationDetail");
 
@@ -390,8 +389,8 @@ namespace JobApi.Migrations
             modelBuilder.Entity("JobApi.Models.SeekerSkill", b =>
                 {
                     b.HasOne("JobApi.Models.JobPostModels.JobSkill", "JobSkill")
-                        .WithMany()
-                        .HasForeignKey("JobSkillId");
+                        .WithOne("SeekerSkill")
+                        .HasForeignKey("JobApi.Models.SeekerSkill", "JobSkillId");
 
                     b.Navigation("JobSkill");
                 });
@@ -415,7 +414,7 @@ namespace JobApi.Migrations
                 {
                     b.HasOne("JobApi.Models.SeekerSkill", null)
                         .WithMany()
-                        .HasForeignKey("SeekerSkilsSeekerSkillId")
+                        .HasForeignKey("SeekerSkillsSeekerSkillId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -441,14 +440,14 @@ namespace JobApi.Migrations
                     b.Navigation("JobPosts");
                 });
 
+            modelBuilder.Entity("JobApi.Models.JobPostModels.JobSkill", b =>
+                {
+                    b.Navigation("SeekerSkill");
+                });
+
             modelBuilder.Entity("JobApi.Models.JobPostModels.JobType", b =>
                 {
                     b.Navigation("JobPosts");
-                });
-
-            modelBuilder.Entity("JobApi.Models.SeekerExperienceDetail", b =>
-                {
-                    b.Navigation("SeekerProfile");
                 });
 #pragma warning restore 612, 618
         }
