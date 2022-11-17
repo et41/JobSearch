@@ -38,8 +38,13 @@ namespace JobApi.Models
             CreateMap<SeekerProfileGetDTO, SeekerProfile>();
             CreateMap<SeekerProfile, SeekerProfileGetDTO>();
 
+            CreateMap<SeekerProfilePutDTO, SeekerProfile>();
+            CreateMap<SeekerProfile, SeekerProfilePutDTO>();
+
             CreateMap<SeekerSkillDTO, SeekerSkill>();
             CreateMap<SeekerSkill, SeekerSkillDTO>();
+            CreateMap<SeekerSkillPutDTO, SeekerSkill>();
+            CreateMap<SeekerSkill, SeekerSkillPutDTO>();
 
             CreateMap<SeekerEducationDetailDTO, SeekerEducationDetail>();
             CreateMap<SeekerEducationDetail, SeekerEducationDetailDTO>();

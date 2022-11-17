@@ -27,7 +27,6 @@ namespace JobApi.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/SeekerProfiles
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SeekerProfileGetDTO>>> GetSeekerProfiles()
         {
@@ -39,7 +38,6 @@ namespace JobApi.Controllers
             return Ok(_mapper.Map<List<SeekerProfileGetDTO>>(profiles));
         }
 
-        // GET: api/SeekerProfiles/5
         [HttpGet("{id}")]
         public async Task<ActionResult<SeekerProfileGetDTO>> GetSeekerProfile(int id)
         {
@@ -59,15 +57,22 @@ namespace JobApi.Controllers
 
         // PUT: api/SeekerProfiles/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutSeekerProfile(int id, SeekerProfile seekerProfile)
+        [HttpPut]
+        public async Task<IActionResult> PutSeekerProfile(SeekerProfilePutDTO seekerProfile)
         {
-            if (id != seekerProfile.SeekerProfileId)
+            int? id = _mapper.Map<SeekerProfile>(seekerProfile).SeekerProfileId;
+            var mappedSeekerProfile = _mapper.Map<SeekerProfile>(seekerProfile);
+            if (id == null)
             {
                 return BadRequest();
             }
 
-            _context.Entry(seekerProfile).State = EntityState.Modified;
+            var profileToUpdate = _context.SeekerProfiles.Find(id);
+            profileToUpdate.LastName = mappedSeekerProfile.LastName;
+            profileToUpdate.FirstName = mappedSeekerProfile.FirstName;
+            profileToUpdate.SeekerExperienceDetail = mappedSeekerProfile.SeekerExperienceDetail;
+            profileToUpdate.SeekerEducationDetail = mappedSeekerProfile.SeekerEducationDetail;
+            profileToUpdate.SeekerSkills = mappedSeekerProfile.SeekerSkills;
 
             try
             {
@@ -120,7 +125,7 @@ namespace JobApi.Controllers
             return NoContent();
         }
 
-        private bool SeekerProfileExists(int id)
+        private bool SeekerProfileExists(int? id)
         {
             return _context.SeekerProfiles.Any(e => e.SeekerProfileId == id);
         }
