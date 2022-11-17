@@ -35,6 +35,8 @@ namespace JobApi.Models
 
             CreateMap<SeekerProfilePostDTO, SeekerProfile>().ForMember(dest => dest.SeekerSkills, opt => opt.MapFrom(src => src.SeekerSkills)); 
             CreateMap<SeekerProfile, SeekerProfilePostDTO>().ForMember(dest => dest.SeekerSkills, opt => opt.MapFrom(src => src.SeekerSkills));
+            CreateMap<SeekerProfileGetDTO, SeekerProfile>();
+            CreateMap<SeekerProfile, SeekerProfileGetDTO>();
 
             CreateMap<SeekerSkillDTO, SeekerSkill>();
             CreateMap<SeekerSkill, SeekerSkillDTO>();

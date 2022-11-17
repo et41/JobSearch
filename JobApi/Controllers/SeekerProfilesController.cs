@@ -10,6 +10,7 @@ using JobApi.Models;
 using JobApi.Models.DTOS.SeekerDTOS;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using AutoMapper;
+using System.Collections.Immutable;
 
 namespace JobApi.Controllers
 {
@@ -28,23 +29,32 @@ namespace JobApi.Controllers
 
         // GET: api/SeekerProfiles
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<SeekerProfile>>> GetSeekerProfiles()
+        public async Task<ActionResult<IEnumerable<SeekerProfileGetDTO>>> GetSeekerProfiles()
         {
-            return await _context.SeekerProfiles.ToListAsync();
+            var profiles = await _context.Set<SeekerProfile>()
+                .Include(c => c.SeekerExperienceDetail)
+                .Include(c => c.SeekerEducationDetail)
+                .Include(c => c.SeekerSkills)
+                .ToListAsync();
+            return Ok(_mapper.Map<List<SeekerProfileGetDTO>>(profiles));
         }
 
         // GET: api/SeekerProfiles/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<SeekerProfile>> GetSeekerProfile(int id)
+        public async Task<ActionResult<SeekerProfileGetDTO>> GetSeekerProfile(int id)
         {
-            var seekerProfile = await _context.SeekerProfiles.FindAsync(id);
+            var profile = await _context.Set<SeekerProfile>()
+            .Include(c => c.SeekerExperienceDetail)
+            .Include(c => c.SeekerEducationDetail)
+            .Include(c => c.SeekerSkills)
+            .FirstOrDefaultAsync(c => c.SeekerProfileId == id);
 
-            if (seekerProfile == null)
+            if (profile == null)
             {
                 return NotFound();
             }
 
-            return seekerProfile;
+            return Ok(_mapper.Map<SeekerProfileGetDTO>(profile));
         }
 
         // PUT: api/SeekerProfiles/5

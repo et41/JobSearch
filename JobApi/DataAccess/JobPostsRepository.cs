@@ -38,40 +38,6 @@ namespace JobApi.DataAccess
                 await _context.SaveChangesAsync();
 
             }
-            /*
-            if (jobpost != null)
-            {
-                var _mappedJobPost = _mapper.Map<JobPost>(jobpost);
-                // compare names and find the matching id if not create 
-                try
-                {
-                    var id = _context.JobCategories.First(s => s.JobCategoryName == jobpost.JobCategoryName).JobCategoryId;
-                    _mappedJobPost.JobCategoryId = id;
-                }
-                catch (Exception)
-                {
-                    _mappedJobPost.JobCategory = new JobCategory() { JobCategoryName = jobpost.JobCategoryName };
-                }
-                try
-                {
-                    var id = _context.JobTypes.First(s => s.JobTypeName == jobpost.JobTypeName).JobTypeId;
-                    _mappedJobPost.JobTypeId = id;
-                }
-                catch (Exception)
-                {
-                    _mappedJobPost.JobType = new JobType() { JobTypeName = jobpost.JobTypeName };
-                }
-                if (jobpost.JobLocation != null)
-                {
-                    try
-                    {
-                        _mappedJobPost.JobLocation = new JobLocation() { City = jobpost.JobLocation.City, Country = jobpost.JobLocation.Country, StreetAddress = jobpost.JobLocation.StreetAddress };
-                    }
-                    catch (Exception)
-                    {
-                        throw;
-                    }
-                }*/
          } 
         public async Task<List<JobPostGetDTO>> GetAllJobPost()
         {

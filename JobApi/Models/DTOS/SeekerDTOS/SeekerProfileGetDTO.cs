@@ -1,0 +1,12 @@
+﻿namespace JobApi.Models.DTOS.SeekerDTOS
+{
+    public class SeekerProfileGetDTO
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public SeekerExperienceDetailDTO? SeekerExperienceDetail { get; set; }
+        public SeekerEducationDetailDTO? SeekerEducationDetail { get; set; }
+        public ICollection<SeekerSkillDTO>? SeekerSkills { get; set; }
+
+    }
+}
