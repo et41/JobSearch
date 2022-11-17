@@ -54,6 +54,7 @@ namespace JobApi.Controllers
         [HttpPut]
         public async Task UpdateJobCategory(JobCategoryDTO jobcategory)
         {
+            /*
             try
             {
                 JobCategory categoryToUpdate = await _context.JobCategories
@@ -79,6 +80,7 @@ namespace JobApi.Controllers
             {
                 throw;
             }
+            */
         }
 
         // POST: api/JobCategories

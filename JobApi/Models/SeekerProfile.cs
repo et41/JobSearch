@@ -1,4 +1,5 @@
 ﻿using JobApi.Models.DTOS.SeekerDTOS;
+using JobApi.Models.UserAccountModels;
 
 namespace JobApi.Models
 {
@@ -12,5 +13,7 @@ namespace JobApi.Models
         public int? SeekerEducationDetailId { get; set; }
         public SeekerEducationDetail? SeekerEducationDetail { get; set; }
         public ICollection<SeekerSkill>? SeekerSkills { get; set; }
+        public int UserAccountId { get; set; }
+        public UserAccount? UserAccount { get; set; }
     }
 }

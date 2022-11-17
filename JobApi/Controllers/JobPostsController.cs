@@ -7,9 +7,10 @@ using Microsoft.EntityFrameworkCore;
 namespace JobApi.Controllers
 {
     [ApiController]
-    [Route("api/jobs/[controller]")]
+    [Route("/user/{userid}/[controller]")]
     public class JobPostsController : ControllerBase
     {
+
         private readonly ILogger<JobPostsController> _logger;
         private readonly IJobPostsRepository _repository;
 
@@ -38,9 +39,9 @@ namespace JobApi.Controllers
             return Ok(jobPost);
         }
         [HttpPost]
-        public async Task<ActionResult<JobPostDTO>> Add(JobPostDTO jobpost)
+        public async Task<ActionResult<JobPostDTO>> Add(JobPostDTO jobpost, int userid)
         {
-            await _repository.CreateJobPost(jobpost);
+            await _repository.CreateJobPost(jobpost, userid);
             return Ok(_repository.GetAll());
         }
         [HttpPut] 

@@ -2,6 +2,7 @@
 using JobApi.Models;
 using JobApi.Models.DTOS.JobPostDTOS;
 using JobApi.Models.JobPostModels;
+using JobApi.Models.UserAccountModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
@@ -18,21 +19,22 @@ namespace JobApi.DataAccess
             _mapper = mapper;
             _context = context;
         }
-        public async Task CreateJobPost(JobPostDTO jobpost)
+        public async Task CreateJobPost(JobPostDTO jobpost, int userid)
         {
-            if(jobpost != null)
+
+            string? usertype = _context.UserAccounts.Include(p => p.UserType).FirstOrDefault(p => p.UserAccountId == userid).UserType.UserTypeName;
+            if(jobpost != null && usertype == "company")
             {
                 JobPost mappedPost = new JobPost()
                 {
                     JobName = jobpost.JobName,
                     JobTypeName = jobpost.JobTypeName,
-                    CompanyName = jobpost.CompanyName,
                     Description = jobpost.Description,
-                    JobCategoryName = jobpost.JobCategoryName,
-                    JobCategory = new JobCategory() { JobCategoryName = jobpost.JobCategoryName },
+                    JobCategory = _mapper.Map<JobCategory>(jobpost.JobCategory),
                     JobLocation = _mapper.Map<JobLocation>(jobpost.JobLocation),
                     JobType = new JobType() { JobTypeName = jobpost.JobTypeName },
                     JobSkills = _mapper.Map<ICollection<JobSkill>>(jobpost.JobSkill),
+                    Company = _context.Companies.FirstOrDefault(p => p.UserAccountId == userid),
                 };
                 await _context.Set<JobPost>().AddAsync(mappedPost);
                 await _context.SaveChangesAsync();
@@ -68,7 +70,7 @@ namespace JobApi.DataAccess
                     postToUpdate.JobTypeName = jobpost.JobTypeName;
                     postToUpdate.Description = jobpost.Description;
                     postToUpdate.CompanyName = jobpost.CompanyName;
-                    postToUpdate.JobCategoryName = jobpost.JobCategoryName;
+                    postToUpdate.JobCategory = jobpost.JobCategory;
                     postToUpdate.JobLocation = _mapper.Map<JobLocation>(jobpost.JobLocation);
                     if(jobpost.JobSkills != null)
                     {

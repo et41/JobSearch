@@ -3,7 +3,9 @@ using AutoMapper.EquivalencyExpression;
 using JobApi.Models.DTOS.CompanyDTOS;
 using JobApi.Models.DTOS.JobPostDTOS;
 using JobApi.Models.DTOS.SeekerDTOS;
+using JobApi.Models.DTOS.UserAccountDTOS;
 using JobApi.Models.JobPostModels;
+using JobApi.Models.UserAccountModels;
 using Microsoft.Build.Framework;
 
 namespace JobApi.Models
@@ -32,6 +34,8 @@ namespace JobApi.Models
             CreateMap<CompanyPostDTO, Company>();
             CreateMap<Company, CompanyGetDTO>();
             CreateMap<CompanyGetDTO, Company>();
+            CreateMap<CompanyForJobPostDTO, Company>();
+            CreateMap<Company, CompanyForJobPostDTO>();
 
             CreateMap<SeekerProfilePostDTO, SeekerProfile>().ForMember(dest => dest.SeekerSkills, opt => opt.MapFrom(src => src.SeekerSkills)); 
             CreateMap<SeekerProfile, SeekerProfilePostDTO>().ForMember(dest => dest.SeekerSkills, opt => opt.MapFrom(src => src.SeekerSkills));
@@ -51,6 +55,11 @@ namespace JobApi.Models
 
             CreateMap<SeekerExperienceDetailDTO, SeekerExperienceDetail>();
             CreateMap<SeekerExperienceDetail, SeekerExperienceDetailDTO>();
+
+            CreateMap<UserAccount, UserAccountDTO>();
+            CreateMap<UserAccountDTO, UserAccount>();
+            CreateMap<UserType, UserTypeDTO>();
+            CreateMap<UserTypeDTO, UserType>();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using JobApi.Models;
 using JobApi.Models.JobPostModels;
 using Microsoft.EntityFrameworkCore;
+using JobApi.Models.UserAccountModels;
 
 namespace JobApi.DataAccess
 {
@@ -21,15 +22,24 @@ namespace JobApi.DataAccess
         public DbSet<SeekerEducationDetail> SeekerEducationDetails { get; set; }    
         public DbSet<SeekerExperienceDetail> SeekerExperienceDetails { get; set; }
         public DbSet<Company> Companies { get; set; }
+        public DbSet<UserAccount> UserAccounts { get; set; }
+        public DbSet<UserType> UserTypes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            /*
             builder.Entity<JobCategory>()
                 .HasIndex(category => category.JobCategoryName)
-                .IsUnique();
+                .IsUnique();*/
             builder.Entity<JobSkill>()
                 .HasIndex(skill => skill.SkillName)
+                .IsUnique();
+            builder.Entity<Company>()
+                .HasIndex(company => company.CompanyName)
+                .IsUnique();
+            builder.Entity<UserType>()
+                .HasIndex(usertype => usertype.UserTypeName)
                 .IsUnique();
             builder.Entity<JobType>().HasData(
                 new JobType
@@ -65,5 +75,7 @@ namespace JobApi.DataAccess
                 });*/
 
         }
+
+        public DbSet<JobApi.Models.UserAccountModels.UserAccount> UserAccount { get; set; }
     }
 }

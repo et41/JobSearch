@@ -5,26 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace JobApi.Migrations
 {
-    public partial class v11 : Migration
+    public partial class v22 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Companies",
-                columns: table => new
-                {
-                    CompanyId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CompanyDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CompanyURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Sector = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Companies", x => x.CompanyId);
-                });
-
             migrationBuilder.CreateTable(
                 name: "JobCategories",
                 columns: table => new
@@ -51,6 +35,19 @@ namespace JobApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_JobLocations", x => x.JobLocationId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "JobSkills",
+                columns: table => new
+                {
+                    JobSkillId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SkillName = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_JobSkills", x => x.JobSkillId);
                 });
 
             migrationBuilder.CreateTable(
@@ -97,16 +94,112 @@ namespace JobApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserTypeName = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SeekerSkills",
                 columns: table => new
                 {
                     SeekerSkillId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    SeekerSkillName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    SeekerSkillName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    JobSkillId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SeekerSkills", x => x.SeekerSkillId);
+                    table.ForeignKey(
+                        name: "FK_SeekerSkills_JobSkills_JobSkillId",
+                        column: x => x.JobSkillId,
+                        principalTable: "JobSkills",
+                        principalColumn: "JobSkillId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserAccount",
+                columns: table => new
+                {
+                    UserAccountId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserTypeId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserAccount", x => x.UserAccountId);
+                    table.ForeignKey(
+                        name: "FK_UserAccount_UserTypes_UserTypeId",
+                        column: x => x.UserTypeId,
+                        principalTable: "UserTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Companies",
+                columns: table => new
+                {
+                    CompanyId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CompanyName = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CompanyDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CompanyURL = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Sector = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserAccountId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Companies", x => x.CompanyId);
+                    table.ForeignKey(
+                        name: "FK_Companies_UserAccount_UserAccountId",
+                        column: x => x.UserAccountId,
+                        principalTable: "UserAccount",
+                        principalColumn: "UserAccountId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SeekerProfiles",
+                columns: table => new
+                {
+                    SeekerProfileId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SeekerExperienceDetailId = table.Column<int>(type: "int", nullable: true),
+                    SeekerEducationDetailId = table.Column<int>(type: "int", nullable: true),
+                    UserAccountId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SeekerProfiles", x => x.SeekerProfileId);
+                    table.ForeignKey(
+                        name: "FK_SeekerProfiles_SeekerEducationDetails_SeekerEducationDetailId",
+                        column: x => x.SeekerEducationDetailId,
+                        principalTable: "SeekerEducationDetails",
+                        principalColumn: "SeekerEducationDetailId");
+                    table.ForeignKey(
+                        name: "FK_SeekerProfiles_SeekerExperienceDetails_SeekerExperienceDetailId",
+                        column: x => x.SeekerExperienceDetailId,
+                        principalTable: "SeekerExperienceDetails",
+                        principalColumn: "SeekerExperienceDetailId");
+                    table.ForeignKey(
+                        name: "FK_SeekerProfiles_UserAccount_UserAccountId",
+                        column: x => x.UserAccountId,
+                        principalTable: "UserAccount",
+                        principalColumn: "UserAccountId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -150,52 +243,6 @@ namespace JobApi.Migrations
                         column: x => x.JobTypeId,
                         principalTable: "JobTypes",
                         principalColumn: "JobTypeId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SeekerProfiles",
-                columns: table => new
-                {
-                    SeekerProfileId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SeekerExperienceDetailId = table.Column<int>(type: "int", nullable: true),
-                    SeekerEducationDetailId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SeekerProfiles", x => x.SeekerProfileId);
-                    table.ForeignKey(
-                        name: "FK_SeekerProfiles_SeekerEducationDetails_SeekerEducationDetailId",
-                        column: x => x.SeekerEducationDetailId,
-                        principalTable: "SeekerEducationDetails",
-                        principalColumn: "SeekerEducationDetailId");
-                    table.ForeignKey(
-                        name: "FK_SeekerProfiles_SeekerExperienceDetails_SeekerExperienceDetailId",
-                        column: x => x.SeekerExperienceDetailId,
-                        principalTable: "SeekerExperienceDetails",
-                        principalColumn: "SeekerExperienceDetailId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "JobSkills",
-                columns: table => new
-                {
-                    JobSkillId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SkillName = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    SeekerSkillId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_JobSkills", x => x.JobSkillId);
-                    table.ForeignKey(
-                        name: "FK_JobSkills_SeekerSkills_SeekerSkillId",
-                        column: x => x.SeekerSkillId,
-                        principalTable: "SeekerSkills",
-                        principalColumn: "SeekerSkillId",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -262,6 +309,19 @@ namespace JobApi.Migrations
                 values: new object[] { 1, "remote" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Companies_CompanyName",
+                table: "Companies",
+                column: "CompanyName",
+                unique: true,
+                filter: "[CompanyName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Companies_UserAccountId",
+                table: "Companies",
+                column: "UserAccountId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_JobCategories_JobCategoryName",
                 table: "JobCategories",
                 column: "JobCategoryName",
@@ -293,12 +353,6 @@ namespace JobApi.Migrations
                 column: "JobTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_JobSkills_SeekerSkillId",
-                table: "JobSkills",
-                column: "SeekerSkillId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_JobSkills_SkillName",
                 table: "JobSkills",
                 column: "SkillName",
@@ -315,9 +369,33 @@ namespace JobApi.Migrations
                 column: "SeekerExperienceDetailId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SeekerProfiles_UserAccountId",
+                table: "SeekerProfiles",
+                column: "UserAccountId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SeekerProfileSeekerSkill_seekerProfilesSeekerProfileId",
                 table: "SeekerProfileSeekerSkill",
                 column: "seekerProfilesSeekerProfileId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SeekerSkills_JobSkillId",
+                table: "SeekerSkills",
+                column: "JobSkillId",
+                unique: true,
+                filter: "[JobSkillId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserAccount_UserTypeId",
+                table: "UserAccount",
+                column: "UserTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserTypes_UserTypeName",
+                table: "UserTypes",
+                column: "UserTypeName",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -332,10 +410,10 @@ namespace JobApi.Migrations
                 name: "JobPosts");
 
             migrationBuilder.DropTable(
-                name: "JobSkills");
+                name: "SeekerProfiles");
 
             migrationBuilder.DropTable(
-                name: "SeekerProfiles");
+                name: "SeekerSkills");
 
             migrationBuilder.DropTable(
                 name: "Companies");
@@ -350,13 +428,19 @@ namespace JobApi.Migrations
                 name: "JobTypes");
 
             migrationBuilder.DropTable(
-                name: "SeekerSkills");
-
-            migrationBuilder.DropTable(
                 name: "SeekerEducationDetails");
 
             migrationBuilder.DropTable(
                 name: "SeekerExperienceDetails");
+
+            migrationBuilder.DropTable(
+                name: "JobSkills");
+
+            migrationBuilder.DropTable(
+                name: "UserAccount");
+
+            migrationBuilder.DropTable(
+                name: "UserTypes");
         }
     }
 }
