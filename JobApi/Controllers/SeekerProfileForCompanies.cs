@@ -51,7 +51,7 @@ namespace JobApi.Controllers
         }
 
         [HttpGet("skill/{skill}")]
-        public async Task<ActionResult<SeekerProfileGetDTO>> GetSeekerProfile(string skill)
+        public async Task<ActionResult<SeekerProfileGetDTO>> GetSeekerProfileBySkill(string skill)
         {
             var skillIds = _context.SeekerSkills.Where(s => s.SeekerSkillName == skill).Select(p => p.SeekerSkillId).ToList();
             List<SeekerProfile> profiles = new List<SeekerProfile>();
@@ -62,6 +62,21 @@ namespace JobApi.Controllers
                            select s).Include(p => p.SeekerExperienceDetail).Include(p => p.SeekerEducationDetail)
                            .Include(p => p.SeekerSkills)
                            .First());
+
+            }
+            return Ok(profiles);
+        }
+        [HttpGet("education/{education}")]
+        public async Task<ActionResult<SeekerProfileGetDTO>> GetSeekerProfileByEducation(string education)
+        {
+            var educationIds = await _context.SeekerEducationDetails.Where(p => p.UniversityName == education).Select(p => p.SeekerEducationDetailId).ToListAsync();
+            List<SeekerProfile> profiles = new List<SeekerProfile>();
+            foreach (var educationId in educationIds)
+            {
+                profiles.Add((from s in _context.SeekerProfiles
+                              where s.SeekerEducationDetail.SeekerEducationDetailId == educationId
+                              select s).Include(p => p.SeekerExperienceDetail).Include(p => p.SeekerEducationDetail)
+                              .First());
 
             }
             return Ok(profiles);
