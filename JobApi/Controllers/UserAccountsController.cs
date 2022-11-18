@@ -12,7 +12,7 @@ using AutoMapper;
 
 namespace JobApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class UserAccountsController : ControllerBase
     {
@@ -25,90 +25,25 @@ namespace JobApi.Controllers
             _mapper = mapper;
         }
 
-        // POST: api/UserAccounts
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Route("user/seeker")]
         [HttpPost]
-        public async Task<ActionResult<UserAccount>> PostUserAccount(UserAccountDTO userAccount)
+        public async Task<ActionResult<UserAccount>> PostUserAccountSeeker(UserAccountSeekerDTO userAccount)
         {
+            var newSeekerUser = _mapper.Map<UserAccount>(userAccount);
             _context.UserAccount.Add(_mapper.Map<UserAccount>(userAccount));
             await _context.SaveChangesAsync();
             return Ok();
         }
 
-
-        // GET: api/UserAccounts
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserAccount>>> GetUserAccount()
+        [Route("user/company")]
+        [HttpPost]
+        public async Task<ActionResult<UserAccount>> PostUserAccountCompany(UserAccountCompanyDTO userAccount)
         {
-            return await _context.UserAccount.ToListAsync();
-        }
-
-        // GET: api/UserAccounts/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<UserAccount>> GetUserAccount(int id)
-        {
-            var userAccount = await _context.UserAccount.FindAsync(id);
-
-            if (userAccount == null)
-            {
-                return NotFound();
-            }
-
-            return userAccount;
-        }
-
-        // PUT: api/UserAccounts/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUserAccount(int id, UserAccount userAccount)
-        {
-            if (id != userAccount.UserAccountId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(userAccount).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserAccountExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-
-
-        // DELETE: api/UserAccounts/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUserAccount(int id)
-        {
-            var userAccount = await _context.UserAccount.FindAsync(id);
-            if (userAccount == null)
-            {
-                return NotFound();
-            }
-
-            _context.UserAccount.Remove(userAccount);
+            var newSeekerUser = _mapper.Map<UserAccount>(userAccount);
+            _context.UserAccount.Add(_mapper.Map<UserAccount>(userAccount));
             await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok();
         }
 
-        private bool UserAccountExists(int id)
-        {
-            return _context.UserAccount.Any(e => e.UserAccountId == id);
-        }
     }
 }

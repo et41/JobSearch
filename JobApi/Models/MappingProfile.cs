@@ -61,6 +61,10 @@ namespace JobApi.Models
             CreateMap<UserAccountDTO, UserAccount>();
             CreateMap<UserType, UserTypeDTO>();
             CreateMap<UserTypeDTO, UserType>();
+            CreateMap<UserAccount, UserAccountSeekerDTO>();
+            CreateMap<UserAccountSeekerDTO, UserAccount>();
+            CreateMap<UserAccount, UserAccountCompanyDTO>();
+            CreateMap<UserAccountCompanyDTO, UserAccount>();
         }
     }
 }
