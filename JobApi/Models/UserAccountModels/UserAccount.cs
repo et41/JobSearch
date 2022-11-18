@@ -1,4 +1,6 @@
-﻿using JobApi.Models.DTOS.UserAccountDTOS;
+﻿using JobApi.Models.CompanyModels;
+using JobApi.Models.DTOS.UserAccountDTOS;
+using JobApi.Models.SeekerProfileModels;
 using System.ComponentModel.DataAnnotations;
 
 namespace JobApi.Models.UserAccountModels

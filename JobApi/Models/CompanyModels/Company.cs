@@ -1,7 +1,7 @@
 ﻿using JobApi.Models.JobPostModels;
 using JobApi.Models.UserAccountModels;
 
-namespace JobApi.Models
+namespace JobApi.Models.CompanyModels
 {
     public class Company
     {

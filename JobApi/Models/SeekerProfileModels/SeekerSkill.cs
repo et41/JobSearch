@@ -1,7 +1,7 @@
 ﻿using JobApi.Models.DTOS.JobPostDTOS;
 using JobApi.Models.JobPostModels;
 
-namespace JobApi.Models
+namespace JobApi.Models.SeekerProfileModels
 {
     public class SeekerSkill
     {

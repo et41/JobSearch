@@ -1,4 +1,6 @@
-﻿namespace JobApi.Models.JobPostModels
+﻿using JobApi.Models.SeekerProfileModels;
+
+namespace JobApi.Models.JobPostModels
 {
     public class JobSkill
     {

@@ -1,4 +1,6 @@
-﻿namespace JobApi.Models.JobPostModels
+﻿using JobApi.Models.CompanyModels;
+
+namespace JobApi.Models.JobPostModels
 {
     public class JobPost : BaseEntity
     {

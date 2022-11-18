@@ -1,12 +1,12 @@
 ﻿using JobApi.Models.DTOS.SeekerDTOS;
 using JobApi.Models.UserAccountModels;
 
-namespace JobApi.Models
+namespace JobApi.Models.SeekerProfileModels
 {
     public class SeekerProfile
     {
         public int? SeekerProfileId { get; set; }
-        public string FirstName { get; set; }    
+        public string FirstName { get; set; }
         public string LastName { get; set; }
         public int? SeekerExperienceDetailId { get; set; }
         public SeekerExperienceDetail? SeekerExperienceDetail { get; set; }

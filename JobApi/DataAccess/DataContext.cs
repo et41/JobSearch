@@ -1,7 +1,8 @@
-﻿using JobApi.Models;
-using JobApi.Models.JobPostModels;
+﻿using JobApi.Models.JobPostModels;
 using Microsoft.EntityFrameworkCore;
 using JobApi.Models.UserAccountModels;
+using JobApi.Models.SeekerProfileModels;
+using JobApi.Models.CompanyModels;
 
 namespace JobApi.DataAccess
 {

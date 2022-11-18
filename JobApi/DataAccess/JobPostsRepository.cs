@@ -21,26 +21,36 @@ namespace JobApi.DataAccess
         }
         public async Task CreateJobPost(JobPostDTO jobpost, int userid)
         {
-
-            string? usertype = _context.UserAccounts.Include(p => p.UserType).FirstOrDefault(p => p.UserAccountId == userid).UserType.UserTypeName;
-            if(jobpost != null && usertype == "company")
+            try
             {
-                JobPost mappedPost = new JobPost()
+                UserType userType = (from s in _context.UserAccounts
+                                     where s.UserAccountId == userid
+                                     select s).Include(p => p.UserType).First().UserType;
+                string? userTypeName = userType.UserTypeName;
+                string? companyname = jobpost.Company.CompanyName;
+                if (jobpost != null && userTypeName == "company" && companyname == _context.Companies.FirstOrDefault(p => p.UserAccountId == userid).CompanyName)
                 {
-                    JobName = jobpost.JobName,
-                    JobTypeName = jobpost.JobTypeName,
-                    Description = jobpost.Description,
-                    JobCategory = _mapper.Map<JobCategory>(jobpost.JobCategory),
-                    JobLocation = _mapper.Map<JobLocation>(jobpost.JobLocation),
-                    JobType = new JobType() { JobTypeName = jobpost.JobTypeName },
-                    JobSkills = _mapper.Map<ICollection<JobSkill>>(jobpost.JobSkill),
-                    Company = _context.Companies.FirstOrDefault(p => p.UserAccountId == userid),
-                };
-                await _context.Set<JobPost>().AddAsync(mappedPost);
-                await _context.SaveChangesAsync();
+                    JobPost mappedPost = new JobPost()
+                    {
+                        JobName = jobpost.JobName,
+                        JobTypeName = jobpost.JobTypeName,
+                        Description = jobpost.Description,
+                        JobCategory = _mapper.Map<JobCategory>(jobpost.JobCategory),
+                        JobLocation = _mapper.Map<JobLocation>(jobpost.JobLocation),
+                        JobType = new JobType() { JobTypeName = jobpost.JobTypeName },
+                        JobSkills = _mapper.Map<ICollection<JobSkill>>(jobpost.JobSkill),
+                        Company = _context.Companies.FirstOrDefault(p => p.UserAccountId == userid),
+                    };
+                    await _context.Set<JobPost>().AddAsync(mappedPost);
+                    await _context.SaveChangesAsync();
 
+                }
             }
-         } 
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         public async Task<List<JobPostGetDTO>> GetAllJobPost()
         {
             var posts = await _context.Set<JobPost>()

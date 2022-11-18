@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using AutoMapper.EquivalencyExpression;
+using JobApi.Models.CompanyModels;
 using JobApi.Models.DTOS.CompanyDTOS;
 using JobApi.Models.DTOS.JobPostDTOS;
 using JobApi.Models.DTOS.SeekerDTOS;
 using JobApi.Models.DTOS.UserAccountDTOS;
 using JobApi.Models.JobPostModels;
+using JobApi.Models.SeekerProfileModels;
 using JobApi.Models.UserAccountModels;
 using Microsoft.Build.Framework;
 

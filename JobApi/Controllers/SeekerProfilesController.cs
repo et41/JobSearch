@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using JobApi.DataAccess;
-using JobApi.Models;
 using JobApi.Models.DTOS.SeekerDTOS;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using AutoMapper;
 using System.Collections.Immutable;
+using JobApi.Models.SeekerProfileModels;
 
 namespace JobApi.Controllers
 {

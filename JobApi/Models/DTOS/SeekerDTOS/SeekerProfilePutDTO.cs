@@ -1,4 +1,6 @@
-﻿namespace JobApi.Models.DTOS.SeekerDTOS
+﻿using JobApi.Models.SeekerProfileModels;
+
+namespace JobApi.Models.DTOS.SeekerDTOS
 {
     public class SeekerProfilePutDTO
     {

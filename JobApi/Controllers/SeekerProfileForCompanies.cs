@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using JobApi.DataAccess;
 using JobApi.Models.DTOS.SeekerDTOS;
-using JobApi.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol;
+using JobApi.Models.SeekerProfileModels;
 
 namespace JobApi.Controllers
 {

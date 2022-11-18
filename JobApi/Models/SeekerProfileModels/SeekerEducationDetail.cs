@@ -1,4 +1,4 @@
-﻿namespace JobApi.Models
+﻿namespace JobApi.Models.SeekerProfileModels
 {
     public class SeekerEducationDetail
     {
