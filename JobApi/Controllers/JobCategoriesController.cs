@@ -26,13 +26,13 @@ namespace JobApi.Controllers
         }
 
         [HttpGet]
-        public async Task<List<JobCategoryDTO>> GetJobCategories()
+        public async Task<List<JobCategoryGetDTO>> GetJobCategories()
         {
             var categories = await _context.Set<JobCategory>()
                 .Include(post => post.JobPosts)
                 .ThenInclude(post => post.JobLocation)
                 .ToListAsync();
-            return categories.Select(s => _mapper.Map<JobCategoryDTO>(s)).ToList();
+            return categories.Select(s => _mapper.Map<JobCategoryGetDTO>(s)).ToList();
         }
 
         [HttpGet("{id}")]

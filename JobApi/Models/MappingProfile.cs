@@ -24,12 +24,13 @@ namespace JobApi.Models
             CreateMap<JobCategoryDTO, JobCategory>();
             CreateMap<JobCategoryPostDTO, JobCategory>();
             CreateMap<JobCategory, JobCategoryPostDTO>();
+            CreateMap<JobCategoryGetDTO, JobCategory>();
+            CreateMap<JobCategory, JobCategoryGetDTO>();
+            //CreateMap<JobSkill, JobSkillDTO>().ForMember(dest => dest.JobSkillId, opt => opt.MapFrom(src => src.JobSkillId));
+            //CreateMap<JobSkillDTO, JobSkill>().ForMember(dest => dest.JobSkillId, opt => opt.MapFrom(src => src.JobSkillId));
 
-            CreateMap<JobSkill, JobSkillDTO>().ForMember(dest => dest.JobSkillId, opt => opt.MapFrom(src => src.JobSkillId));
-            CreateMap<JobSkillDTO, JobSkill>().ForMember(dest => dest.JobSkillId, opt => opt.MapFrom(src => src.JobSkillId));
-
-            //CreateMap<JobSkill, JobSkillDTO>();
-            ///CreateMap<JobSkillDTO, JobSkill>();
+            CreateMap<JobSkill, JobSkillDTO>();
+            CreateMap<JobSkillDTO, JobSkill>();
             CreateMap<Company, CompanyPostDTO>();
             CreateMap<CompanyPostDTO, Company>();
             CreateMap<Company, CompanyGetDTO>();

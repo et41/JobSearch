@@ -4,7 +4,6 @@
     {
         public string JobName { get; set; }
         public string JobTypeName { get; set; }
-        public string? CompanyName { get; set; }
         public string? Description { get; set; }
         public bool IsActive { get; set; } = true;
         //public string JobCategoryName { get; set; }

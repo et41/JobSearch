@@ -47,6 +47,7 @@ namespace JobApi.DataAccess
                 .Include(c => c.JobType)
                 .Include(c => c.JobLocation)
                 .Include(c => c.JobSkills)
+                .Include(c => c.JobCategory)
                 .ToListAsync();
             return _mapper.Map<List<JobPostGetDTO>>(posts);
         }
@@ -63,23 +64,18 @@ namespace JobApi.DataAccess
         {
             try
             {
-                JobPost postToUpdate = await _context.JobPosts.Include(p => p.JobSkills).FirstOrDefaultAsync(c => c.Id == jobpost.Id);
+                JobPost postToUpdate = await _context.JobPosts
+                  .FirstOrDefaultAsync(c => c.Id == jobpost.Id);
+
                 if(postToUpdate != null)
                 {
                     postToUpdate.JobName = jobpost.JobName;
                     postToUpdate.JobTypeName = jobpost.JobTypeName;
                     postToUpdate.Description = jobpost.Description;
-                    postToUpdate.CompanyName = jobpost.CompanyName;
-                    postToUpdate.JobCategory = jobpost.JobCategory;
-                    postToUpdate.JobLocation = _mapper.Map<JobLocation>(jobpost.JobLocation);
-                    if(jobpost.JobSkills != null)
-                    {
-                        foreach (var item in postToUpdate.JobSkills.ToList())
-                        {
-                            postToUpdate.JobSkills.Remove(item);
-                        }
-                        postToUpdate.JobSkills = _mapper.Map<ICollection<JobSkill>>(jobpost.JobSkills);
-                    }
+                    _context.JobCategories.Update(_mapper.Map<JobCategory>(jobpost.JobCategory));
+                    _context.JobLocations.Update(_mapper.Map<JobLocation>(jobpost.JobLocation));
+                    _context.JobSkills.UpdateRange(_mapper.Map<ICollection<JobSkill>>(jobpost.JobSkills));
+                    _context.Update(postToUpdate);
                     await _context.SaveChangesAsync();
                 }
             }
@@ -87,9 +83,6 @@ namespace JobApi.DataAccess
             {
                 throw;
             }
-        }
-        public async Task DeleteJobPost(int id)
-        {
         }
     }
 }

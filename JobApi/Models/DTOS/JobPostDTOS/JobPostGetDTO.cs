@@ -9,8 +9,7 @@ namespace JobApi.Models.DTOS.JobPostDTOS
         public string JobTypeName { get; set; }
         public string? Description { get; set; }
         public virtual JobLocationDTO? JobLocation { get; set; }
-        public string CompanyName { get; set; }
         public ICollection<JobSkillDTO> JobSkills { get; set; }
-        public JobCategory JobCategory { get; set; }
+        public JobCategoryDTO JobCategory { get; set; }
     }
 }

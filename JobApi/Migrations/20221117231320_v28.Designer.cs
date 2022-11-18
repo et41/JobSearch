@@ -4,6 +4,7 @@ using JobApi.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20221117231320_v28")]
+    partial class v28
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,7 +52,7 @@ namespace JobApi.Migrations
                     b.HasIndex("UserAccountId")
                         .IsUnique();
 
-                    b.ToTable("Companies", (string)null);
+                    b.ToTable("Companies");
                 });
 
             modelBuilder.Entity("JobApi.Models.JobPostModels.JobCategory", b =>
@@ -66,7 +68,7 @@ namespace JobApi.Migrations
 
                     b.HasKey("JobCategoryId");
 
-                    b.ToTable("JobCategories", (string)null);
+                    b.ToTable("JobCategories");
 
                     b.HasData(
                         new
@@ -97,7 +99,7 @@ namespace JobApi.Migrations
 
                     b.HasKey("JobLocationId");
 
-                    b.ToTable("JobLocations", (string)null);
+                    b.ToTable("JobLocations");
 
                     b.HasData(
                         new
@@ -119,6 +121,9 @@ namespace JobApi.Migrations
 
                     b.Property<int?>("CompanyId")
                         .HasColumnType("int");
+
+                    b.Property<string>("CompanyName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -156,7 +161,7 @@ namespace JobApi.Migrations
 
                     b.HasIndex("JobTypeId");
 
-                    b.ToTable("JobPosts", (string)null);
+                    b.ToTable("JobPosts");
                 });
 
             modelBuilder.Entity("JobApi.Models.JobPostModels.JobSkill", b =>
@@ -173,7 +178,7 @@ namespace JobApi.Migrations
 
                     b.HasKey("JobSkillId");
 
-                    b.ToTable("JobSkills", (string)null);
+                    b.ToTable("JobSkills");
                 });
 
             modelBuilder.Entity("JobApi.Models.JobPostModels.JobType", b =>
@@ -190,7 +195,7 @@ namespace JobApi.Migrations
 
                     b.HasKey("JobTypeId");
 
-                    b.ToTable("JobTypes", (string)null);
+                    b.ToTable("JobTypes");
 
                     b.HasData(
                         new
@@ -220,7 +225,7 @@ namespace JobApi.Migrations
 
                     b.HasKey("SeekerEducationDetailId");
 
-                    b.ToTable("SeekerEducationDetails", (string)null);
+                    b.ToTable("SeekerEducationDetails");
                 });
 
             modelBuilder.Entity("JobApi.Models.SeekerExperienceDetail", b =>
@@ -243,7 +248,7 @@ namespace JobApi.Migrations
 
                     b.HasKey("SeekerExperienceDetailId");
 
-                    b.ToTable("SeekerExperienceDetails", (string)null);
+                    b.ToTable("SeekerExperienceDetails");
                 });
 
             modelBuilder.Entity("JobApi.Models.SeekerProfile", b =>
@@ -280,7 +285,7 @@ namespace JobApi.Migrations
                     b.HasIndex("UserAccountId")
                         .IsUnique();
 
-                    b.ToTable("SeekerProfiles", (string)null);
+                    b.ToTable("SeekerProfiles");
                 });
 
             modelBuilder.Entity("JobApi.Models.SeekerSkill", b =>
@@ -304,7 +309,7 @@ namespace JobApi.Migrations
                         .IsUnique()
                         .HasFilter("[JobSkillId] IS NOT NULL");
 
-                    b.ToTable("SeekerSkills", (string)null);
+                    b.ToTable("SeekerSkills");
                 });
 
             modelBuilder.Entity("JobApi.Models.UserAccountModels.UserAccount", b =>
@@ -328,7 +333,7 @@ namespace JobApi.Migrations
 
                     b.HasIndex("UserTypeId");
 
-                    b.ToTable("UserAccount", (string)null);
+                    b.ToTable("UserAccount");
                 });
 
             modelBuilder.Entity("JobApi.Models.UserAccountModels.UserType", b =>
@@ -345,7 +350,7 @@ namespace JobApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserTypes", (string)null);
+                    b.ToTable("UserTypes");
                 });
 
             modelBuilder.Entity("JobPostJobSkill", b =>
@@ -360,7 +365,7 @@ namespace JobApi.Migrations
 
                     b.HasIndex("JobSkillsJobSkillId");
 
-                    b.ToTable("JobPostJobSkill", (string)null);
+                    b.ToTable("JobPostJobSkill");
                 });
 
             modelBuilder.Entity("SeekerProfileSeekerSkill", b =>
@@ -375,7 +380,7 @@ namespace JobApi.Migrations
 
                     b.HasIndex("seekerProfilesSeekerProfileId");
 
-                    b.ToTable("SeekerProfileSeekerSkill", (string)null);
+                    b.ToTable("SeekerProfileSeekerSkill");
                 });
 
             modelBuilder.Entity("JobApi.Models.Company", b =>

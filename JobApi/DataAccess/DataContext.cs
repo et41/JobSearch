@@ -32,15 +32,15 @@ namespace JobApi.DataAccess
             builder.Entity<JobCategory>()
                 .HasIndex(category => category.JobCategoryName)
                 .IsUnique();*/
-            builder.Entity<JobSkill>()
+            /*builder.Entity<JobSkill>()
                 .HasIndex(skill => skill.SkillName)
-                .IsUnique();
-            builder.Entity<Company>()
+                .IsUnique();*/
+            /*builder.Entity<Company>()
                 .HasIndex(company => company.CompanyName)
-                .IsUnique();
-            builder.Entity<UserType>()
+                .IsUnique();*/
+            /*builder.Entity<UserType>()
                 .HasIndex(usertype => usertype.UserTypeName)
-                .IsUnique();
+                .IsUnique();*/
             builder.Entity<JobType>().HasData(
                 new JobType
                 {
