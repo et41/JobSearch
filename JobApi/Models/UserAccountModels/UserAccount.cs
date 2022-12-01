@@ -11,8 +11,10 @@ namespace JobApi.Models.UserAccountModels
         public int UserAccountId { get; set; }
         public string? Email { get; set; }
         public string? Password { get; set; }
+        public int? UserTypeId { get; set; }
         public UserType UserType { get; set; }
         public Company? Company { get; set; }
         public SeekerProfile? SeekerProfile { get; set; }
+        public ICollection<JobPostActivity>? JobPostActivities { get; set; }
     }
 }

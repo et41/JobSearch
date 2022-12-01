@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace JobApi.Migrations
 {
-    public partial class v22 : Migration
+    public partial class last2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,7 +15,7 @@ namespace JobApi.Migrations
                 {
                     JobCategoryId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    JobCategoryName = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    JobCategoryName = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -43,7 +43,7 @@ namespace JobApi.Migrations
                 {
                     JobSkillId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    SkillName = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    SkillName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -97,13 +97,13 @@ namespace JobApi.Migrations
                 name: "UserTypes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    UserTypeId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserTypeName = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserTypeName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserTypes", x => x.Id);
+                    table.PrimaryKey("PK_UserTypes", x => x.UserTypeId);
                 });
 
             migrationBuilder.CreateTable(
@@ -133,7 +133,7 @@ namespace JobApi.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserTypeId = table.Column<int>(type: "int", nullable: false)
+                    UserTypeId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -142,8 +142,7 @@ namespace JobApi.Migrations
                         name: "FK_UserAccount_UserTypes_UserTypeId",
                         column: x => x.UserTypeId,
                         principalTable: "UserTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "UserTypeId");
                 });
 
             migrationBuilder.CreateTable(
@@ -152,7 +151,7 @@ namespace JobApi.Migrations
                 {
                     CompanyId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CompanyName = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CompanyDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CompanyURL = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Sector = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -210,10 +209,8 @@ namespace JobApi.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     JobName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     JobTypeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    JobCategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     JobCategoryId = table.Column<int>(type: "int", nullable: true),
                     JobLocationId = table.Column<int>(type: "int", nullable: true),
                     JobTypeId = table.Column<int>(type: "int", nullable: true),
@@ -270,6 +267,32 @@ namespace JobApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "JobPostActivity",
+                columns: table => new
+                {
+                    JobActivityId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AppliedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AppliedJobId = table.Column<int>(type: "int", nullable: true),
+                    JobPostId = table.Column<int>(type: "int", nullable: true),
+                    UserAccountId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_JobPostActivity", x => x.JobActivityId);
+                    table.ForeignKey(
+                        name: "FK_JobPostActivity_JobPosts_JobPostId",
+                        column: x => x.JobPostId,
+                        principalTable: "JobPosts",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_JobPostActivity_UserAccount_UserAccountId",
+                        column: x => x.UserAccountId,
+                        principalTable: "UserAccount",
+                        principalColumn: "UserAccountId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "JobPostJobSkill",
                 columns: table => new
                 {
@@ -308,12 +331,24 @@ namespace JobApi.Migrations
                 columns: new[] { "JobTypeId", "JobTypeName" },
                 values: new object[] { 1, "remote" });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Companies_CompanyName",
-                table: "Companies",
-                column: "CompanyName",
-                unique: true,
-                filter: "[CompanyName] IS NOT NULL");
+            migrationBuilder.InsertData(
+                table: "UserTypes",
+                columns: new[] { "UserTypeId", "UserTypeName" },
+                values: new object[,]
+                {
+                    { 1, "company" },
+                    { 2, "seeker" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "UserAccount",
+                columns: new[] { "UserAccountId", "Email", "Password", "UserTypeId" },
+                values: new object[] { 1, "arcelik@arcelik.com", "aa", 1 });
+
+            migrationBuilder.InsertData(
+                table: "UserAccount",
+                columns: new[] { "UserAccountId", "Email", "Password", "UserTypeId" },
+                values: new object[] { 2, "nazliaktay@gmail.com", "aa", 2 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Companies_UserAccountId",
@@ -322,10 +357,14 @@ namespace JobApi.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_JobCategories_JobCategoryName",
-                table: "JobCategories",
-                column: "JobCategoryName",
-                unique: true);
+                name: "IX_JobPostActivity_JobPostId",
+                table: "JobPostActivity",
+                column: "JobPostId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_JobPostActivity_UserAccountId",
+                table: "JobPostActivity",
+                column: "UserAccountId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_JobPostJobSkill_JobSkillsJobSkillId",
@@ -351,12 +390,6 @@ namespace JobApi.Migrations
                 name: "IX_JobPosts_JobTypeId",
                 table: "JobPosts",
                 column: "JobTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_JobSkills_SkillName",
-                table: "JobSkills",
-                column: "SkillName",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_SeekerProfiles_SeekerEducationDetailId",
@@ -390,16 +423,13 @@ namespace JobApi.Migrations
                 name: "IX_UserAccount_UserTypeId",
                 table: "UserAccount",
                 column: "UserTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserTypes_UserTypeName",
-                table: "UserTypes",
-                column: "UserTypeName",
-                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "JobPostActivity");
+
             migrationBuilder.DropTable(
                 name: "JobPostJobSkill");
 

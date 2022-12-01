@@ -54,6 +54,7 @@ namespace JobApi.DataAccess
                     JobCategoryId = 1,
                     JobCategoryName = "backend developer"
                 });
+
             builder.Entity<JobLocation>().HasData(
                 new JobLocation 
                 { 
@@ -62,6 +63,38 @@ namespace JobApi.DataAccess
                     City = "Istanbul",
                     Country = "Turkey",
                 });
+
+            builder.Entity<UserType>().HasData(
+                new UserType
+                {
+                    UserTypeId = 1,
+                    UserTypeName = "company",
+                });
+
+             builder.Entity<UserType>().HasData(
+                new UserType
+                {
+                    UserTypeId = 2,
+                    UserTypeName = "seeker",
+                });
+
+            builder.Entity<UserAccount>().HasData(
+                new UserAccount
+                {
+                    UserAccountId = 1,
+                    Email = "arcelik@arcelik.com",
+                    Password = "aa",
+                    UserTypeId = 1,
+                }) ;
+            builder.Entity<UserAccount>().HasData(
+                new UserAccount
+                {
+                    UserAccountId = 2,
+                    Email = "nazliaktay@gmail.com",
+                    Password = "aa",
+                    UserTypeId = 2,
+                });
+                
            /* builder.Entity<JobSkill>().HasData(
                 new JobSkill
                 {

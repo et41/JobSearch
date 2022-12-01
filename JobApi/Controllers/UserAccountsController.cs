@@ -44,6 +44,13 @@ namespace JobApi.Controllers
             await _context.SaveChangesAsync();
             return Ok();
         }
+        [Route("user")]
+        [HttpGet]
+        public async Task<ActionResult<UserAccount>> GetUserAccounts()
+        {
+            var accounts = await _context.Set<UserAccount>().ToListAsync();
+            return Ok(accounts);
+        }
 
     }
 }

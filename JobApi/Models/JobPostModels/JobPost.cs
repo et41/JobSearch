@@ -15,8 +15,9 @@ namespace JobApi.Models.JobPostModels
         public virtual JobLocation? JobLocation { get; set; }
         public int? JobTypeId { get; set; }
         public virtual JobType? JobType { get; set; }
-        public virtual ICollection<JobSkill>? JobSkills { get; set; }
         public virtual Company? Company { get; set; }
+        public virtual ICollection<JobSkill>? JobSkills { get; set; }
+        public virtual ICollection<JobPostActivity>? JobPostActivities { get; set; }
 
     }
 }
