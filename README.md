@@ -1,3 +1,3 @@
 # JobSearch
 
-# c# backend project using entity framework. 
+c# backend project using entity framework. 
